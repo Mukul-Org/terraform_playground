@@ -1,0 +1,28 @@
+# .github/workflows/fetch-cred.yml
+name: Fetch Cred
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  example:
+    name: Fetch Cred Job
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./examples/fabric_project
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Writing file
+        run: |
+          echo "$SA_KEY" > key.json
+          GOOGLE_APPLICATION_CREDENTIALS="${PWD}/key.json"
+          echo $GOOGLE_APPLICATION_CREDENTIALS # This will print the file path in GOOGLE_APPLICATION_CREDENTIALS variable
+          cat $GOOGLE_APPLICATION_CREDENTIALS # This will print the file content
+        shell: bash
+        env:
+          SA_KEY: ${{secrets.GCP_SA_KEY}}
