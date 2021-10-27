@@ -3,6 +3,7 @@ name: Fetch Cred
 on:
   push:
   pull_request:
+    types: [ closed ]
   workflow_dispatch:
 
 permissions:
@@ -12,6 +13,7 @@ permissions:
 jobs:
   example:
     name: Fetch Cred Job
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -29,4 +31,4 @@ jobs:
           cat $GOOGLE_APPLICATION_CREDENTIALS # This will print the file content
         shell: bash
         env:
-          SA_KEY: ${{env.GCP_SA_KEY}}
+          SA_KEY: ${{secrets.GCP_SA_KEY}}
