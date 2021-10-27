@@ -23,12 +23,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Set environment
+        run: |
+          echo "GOOGLE_APPLICATION_CREDENTIALS=${GITHUB_WORKSPACE}/.github/workflows/fake-key.json" >> $GITHUB_ENV
+
       - name: Writing file
         run: |
-          echo "$SA_KEY" > key.json
-          GOOGLE_APPLICATION_CREDENTIALS="${PWD}/key.json"
           echo $GOOGLE_APPLICATION_CREDENTIALS # This will print the file path in GOOGLE_APPLICATION_CREDENTIALS variable
           cat $GOOGLE_APPLICATION_CREDENTIALS # This will print the file content
         shell: bash
-        with:
-          credentials: ${{ secrets.GCP_SA_KEY }}
