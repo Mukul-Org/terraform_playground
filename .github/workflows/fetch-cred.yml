@@ -29,4 +29,4 @@ jobs:
           cat $GOOGLE_APPLICATION_CREDENTIALS # This will print the file content
         shell: bash
         env:
-          SA_KEY: ${{secrets.GCP_SA_KEY}}
+          SA_KEY: ${{env.GCP_SA_KEY}}
