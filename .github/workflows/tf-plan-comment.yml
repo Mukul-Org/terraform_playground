@@ -1,4 +1,6 @@
-name: 'Terraform'
+# .github/workflows/tf-plan-comment.yml
+
+name: 'TF Plan Example Fabric Project'
 
 on:
   pull_request:
