@@ -28,7 +28,7 @@ variable "billing_account" {
 variable "name" {
   description = "Project name, joined with prefix."
   type        = string
-  default     = "fabric-project-test"
+  default     = "fabric-project"
 }
 
 variable "owners" {
