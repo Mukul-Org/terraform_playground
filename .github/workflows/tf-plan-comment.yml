@@ -44,18 +44,18 @@ jobs:
           mapfile -d ',' -t added_modified_files < <(printf '%s,' '${{ steps.files.outputs.added_modified }}')
           for added_modified_file in "${added_modified_files[@]}"; do
             export DIR="$(dirname ${added_modified_file})"
-            echo "Added/Modifed File ${added_modified_file} | Base Directory: ${DIR}"
           done
-          echo "::set-env name=DIR::$DIR"
 
       - name: Get removed files
         run: |
           readarray -t removed_files <<<"$(jq -r '.[]' <<<'${{ steps.files.outputs.removed }}')"
           for removed_file in ${removed_files[@]}; do
             export DIR="$(dirname ${removed_file})"
-            echo "Removed File ${removed_file} | Base Directory: ${DIR}"
           done
-          echo "::set-env name=DIR::$DIR"
+
+      - name: Print DIR
+        run: |
+          echo "$DIR"
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
