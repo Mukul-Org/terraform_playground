@@ -31,10 +31,10 @@ jobs:
           for added_modified_file in "${added_modified_files[@]}"; do
             echo "File Added/Modified : ${added_modified_file}" 
           done
-          echo "${added_modified_files[0]}"
+          # echo "${added_modified_files[0]}"
           DIR="$(dirname ${added_modified_files[0]})"
-          echo "DIR=${DIR:2}"
-          echo "ENV_DIR=${DIR}" >> $GITHUB_ENV
+          # echo "DIR=${DIR:2}"
+          echo "ENV_DIR=${DIR:2}" >> $GITHUB_ENV
 
       - name: Print ENV_DIR
         run: |
