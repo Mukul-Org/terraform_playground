@@ -1,6 +1,6 @@
 # .github/workflows/tf-plan-comment.yml
 
-name: 'TF Plan Example'
+name: 'BUILD - Terraform Plan'
 
 on:
   pull_request:
@@ -35,18 +35,20 @@ jobs:
         run: |
           mapfile -d ',' -t added_modified_files < <(printf '%s,' '${{ steps.files.outputs.added_modified }}')
           for added_modified_file in "${added_modified_files[@]}"; do
-            DIR="$(dirname ${added_modified_file})"
-            echo "ENV_DIR=${DIR}" >> $GITHUB_ENV
+            echo "File Added/Modified : ${added_modified_file}" 
           done
+          DIR="$(dirname ${added_modified_files[0]})"
+          echo "ENV_DIR=${DIR:2}" >> $GITHUB_ENV
         continue-on-error: true
 
       - name: Get removed files
         run: |
           readarray -t removed_files <<<"$(jq -r '.[]' <<<'${{ steps.files.outputs.removed }}')"
           for removed_file in ${removed_files[@]}; do
-            DIR="$(dirname ${removed_file})"
-            echo "ENV_DIR=${DIR}" >> $GITHUB_ENV
+            echo "File Added/Modified : ${removed_file}" 
           done
+          DIR="$(dirname ${removed_files[0]})"
+          echo "ENV_DIR=${DIR:2}" >> $GITHUB_ENV
         continue-on-error: true
 
       - name: Setup Terraform
