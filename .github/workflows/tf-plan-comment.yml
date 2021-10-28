@@ -43,15 +43,20 @@ jobs:
         run: |
           mapfile -d ',' -t added_modified_files < <(printf '%s,' '${{ steps.files.outputs.added_modified }}')
           for added_modified_file in "${added_modified_files[@]}"; do
-            export DIR="$(dirname ${added_modified_file})"
+            export DIR="$(dirname "${added_modified_file}")"
           done
 
       - name: Get removed files
         run: |
           readarray -t removed_files <<<"$(jq -r '.[]' <<<'${{ steps.files.outputs.removed }}')"
           for removed_file in ${removed_files[@]}; do
-            export DIR="$(dirname ${removed_file})"
+            export DIR="$(dirname "${removed_file}")"
           done
+
+      - name: Manual DIR set
+        run: |
+          VAR = "examples/fabric_project/variables.tf"
+          export DIR="$(dirname "${VAR}")"
 
       - name: Print DIR
         run: |
