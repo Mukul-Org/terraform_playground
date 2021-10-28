@@ -45,7 +45,7 @@ jobs:
         run: |
           mapfile -d ',' -t added_modified_files < <(printf '%s,' '${{ steps.files.outputs.added_modified }}')
           for added_modified_file in "${added_modified_files[@]}"; do
-            DIR="$(dirname "${added_modified_file}")"
+            DIR="$(dirname ${added_modified_file})"
           done
         continue-on-error: true
 
@@ -53,7 +53,7 @@ jobs:
         run: |
           readarray -t removed_files <<<"$(jq -r '.[]' <<<'${{ steps.files.outputs.removed }}')"
           for removed_file in ${removed_files[@]}; do
-            DIR="$(dirname "${removed_file}")"
+            DIR="$(dirname ${removed_file})"
           done
         continue-on-error: true
 
