@@ -72,6 +72,7 @@ jobs:
         shell: bash
 
       - name: Terraform Format
+        working-directory: ${DIR}
         id: fmt
         run: terraform fmt -check -recursive
         continue-on-error: true
@@ -85,6 +86,7 @@ jobs:
           commenter_exitcode: ${{ steps.fmt.outputs.exitcode }}
 
       - name: Terraform Init
+        working-directory: ${DIR}
         id: init
         run: terraform init
 
@@ -97,6 +99,7 @@ jobs:
           commenter_exitcode: ${{ steps.init.outputs.exitcode }}
 
       - name: Terraform Validate
+        working-directory: ${DIR}
         id: validate
         run: terraform validate
 
@@ -109,6 +112,7 @@ jobs:
           commenter_exitcode: ${{ steps.validate.outputs.exitcode }}
 
       - name: Terraform Plan
+        working-directory: ${DIR}
         id: plan
         run: terraform plan -out workspace.plan
         env:
