@@ -1,12 +1,8 @@
 # .github/workflows/tf-valriable.yml
 
-name: 'TF Plan Example Fabric Project'
+name: '[TEST] TF Plan Example Fabric Project'
 
 on:
-  pull_request:
-    types: [opened, reopened]
-    paths:
-      - 'examples/**/*.tf'
   push:
   workflow_dispatch:
 
@@ -27,10 +23,11 @@ jobs:
           FILES='examples/fabric_project/variables.tf'
           export DIR="$(dirname "${FILES}")"
           echo "${DIR}"
+          echo "ENV_DIR={DIR}" >> $GITHUB_ENV
 
-      - name: Print DIR
+      - name: Print ENV_DIR
         run: |
-          echo "${DIR}"
+          echo "${ENV_DIR}"
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
@@ -49,7 +46,7 @@ jobs:
         shell: bash
 
       - name: Terraform Format
-        working-directory: ./$DIR
+        working-directory: ./${ENV_DIR}
         id: fmt
         run: terraform fmt -check -recursive
         continue-on-error: true
@@ -63,7 +60,7 @@ jobs:
           commenter_exitcode: ${{ steps.fmt.outputs.exitcode }}
 
       - name: Terraform Init
-        working-directory: ./$DIR
+        working-directory: ./${ENV_DIR}
         id: init
         run: terraform init
 
@@ -76,7 +73,7 @@ jobs:
           commenter_exitcode: ${{ steps.init.outputs.exitcode }}
 
       - name: Terraform Validate
-        working-directory: ./$DIR
+        working-directory: ./${ENV_DIR}
         id: validate
         run: terraform validate
 
@@ -89,7 +86,7 @@ jobs:
           commenter_exitcode: ${{ steps.validate.outputs.exitcode }}
 
       - name: Terraform Plan
-        working-directory: ./$DIR
+        working-directory: ./${ENV_DIR}
         id: plan
         run: terraform plan -out workspace.plan
         env:
