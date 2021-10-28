@@ -44,7 +44,7 @@ jobs:
           mapfile -d ',' -t added_modified_files < <(printf '%s,' '${{ steps.files.outputs.added_modified }}')
           for added_modified_file in "${added_modified_files[@]}"; do
             DIR="$(dirname ${added_modified_file})"
-            echo "Added/Modifed File ${added_modified_file} | Base Directory: [${DIR}]"
+            echo "Added/Modifed File ${added_modified_file} | Base Directory: ${DIR}"
           done
 
       - name: Get removed files
@@ -52,10 +52,11 @@ jobs:
           readarray -t removed_files <<<"$(jq -r '.[]' <<<'${{ steps.files.outputs.removed }}')"
           for removed_file in ${removed_files[@]}; do
             DIR="$(dirname ${removed_file})"
-            echo "Removed File ${removed_file} | Base Directory: [${DIR}]"
+            echo "Removed File ${removed_file} | Base Directory: ${DIR}"
           done
 
       - name: Setup Terraform
+        working-directory: ${DIR}
         uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
