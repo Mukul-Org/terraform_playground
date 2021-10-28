@@ -1,4 +1,4 @@
-# .github/workflows/tf-plan-comment.yml
+# .github/workflows/tf-valriable.yml
 
 name: 'TF Plan Example Fabric Project'
 
@@ -26,6 +26,7 @@ jobs:
         run: |
           FILES='examples/fabric_project/variables.tf'
           export DIR="$(dirname "${FILES}")"
+          echo "${DIR}"
 
       - name: Print DIR
         run: |
