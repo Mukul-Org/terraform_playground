@@ -1,6 +1,6 @@
 # .github/workflows/tf-plan-comment.yml
 
-name: '[TEST] TF Plan Example Fabric Project'
+name: 'TF Plan Example Fabric Project'
 
 on:
   pull_request:
@@ -21,19 +21,9 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       TF_IN_AUTOMATION: true
-      # defaults:
-      #   run:
-      #     working-directory: $(pwd)
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: List Updated files
-        run: |
-          URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${{ github.event.pull_request.number }}/files"
-          FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
-          echo $FILES
-        continue-on-error: true
 
       - id: files
         uses: jitterbit/get-changed-files@v1
@@ -46,9 +36,8 @@ jobs:
           mapfile -d ',' -t added_modified_files < <(printf '%s,' '${{ steps.files.outputs.added_modified }}')
           for added_modified_file in "${added_modified_files[@]}"; do
             DIR="$(dirname ${added_modified_file})"
-            echo "ENV_DIR={DIR}" >> $GITHUB_ENV
+            echo "ENV_DIR=${DIR}" >> $GITHUB_ENV
           done
-          echo "${{ env.ENV_DIR }}"
         continue-on-error: true
 
       - name: Get removed files
@@ -56,15 +45,9 @@ jobs:
           readarray -t removed_files <<<"$(jq -r '.[]' <<<'${{ steps.files.outputs.removed }}')"
           for removed_file in ${removed_files[@]}; do
             DIR="$(dirname ${removed_file})"
-            echo "ENV_DIR={DIR}" >> $GITHUB_ENV
+            echo "ENV_DIR=${DIR}" >> $GITHUB_ENV
           done
-          echo "${{ env.ENV_DIR }}"
         continue-on-error: true
-
-      - name: Print ENV_DIR
-        run: |
-          echo "${{ env.ENV_DIR }}"
-          echo env.ENV_DIR
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
@@ -79,11 +62,11 @@ jobs:
       - name: Printing Cred
         run: |
           echo $GOOGLE_APPLICATION_CREDENTIALS # This will print the file path in GOOGLE_APPLICATION_CREDENTIALS variable
-          cat $GOOGLE_APPLICATION_CREDENTIALS # This will print the file content
+          # cat $GOOGLE_APPLICATION_CREDENTIALS # This will print the file content
         shell: bash
 
       - name: Terraform Format
-        working-directory: ./${{ env.ENV_DIR }}
+        working-directory: ${{ env.ENV_DIR }}
         id: fmt
         run: terraform fmt -check -recursive
         continue-on-error: true
@@ -97,7 +80,7 @@ jobs:
           commenter_exitcode: ${{ steps.fmt.outputs.exitcode }}
 
       - name: Terraform Init
-        working-directory: ./${{ env.ENV_DIR }}
+        working-directory: ${{ env.ENV_DIR }}
         id: init
         run: terraform init
 
@@ -110,7 +93,7 @@ jobs:
           commenter_exitcode: ${{ steps.init.outputs.exitcode }}
 
       - name: Terraform Validate
-        working-directory: ./${{ env.ENV_DIR }}
+        working-directory: ${{ env.ENV_DIR }}
         id: validate
         run: terraform validate
 
@@ -123,7 +106,7 @@ jobs:
           commenter_exitcode: ${{ steps.validate.outputs.exitcode }}
 
       - name: Terraform Plan
-        working-directory: ./${{ env.ENV_DIR }}
+        working-directory: ${{ env.ENV_DIR }}
         id: plan
         run: terraform plan -out workspace.plan
         env:
