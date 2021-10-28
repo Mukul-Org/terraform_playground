@@ -65,5 +65,5 @@ jobs:
 
       - name: execute py script # run the tfdoc.py
         run: |
-          python tfdoc.py ${{ env.ENV_DIR }}
+          python tfdoc.py ${GITHUB_WORKSPACE}/${{ env.ENV_DIR }}
         working-directory: tools
