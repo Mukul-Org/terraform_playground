@@ -1,6 +1,6 @@
 # .github/workflows/tf-plan-comment.yml
 
-name: 'TF Plan Example Fabric Project'
+name: '[TEST] TF Plan Example Fabric Project'
 
 on:
   pull_request:
@@ -56,7 +56,7 @@ jobs:
           readarray -t removed_files <<<"$(jq -r '.[]' <<<'${{ steps.files.outputs.removed }}')"
           for removed_file in ${removed_files[@]}; do
             DIR="$(dirname ${removed_file})"
-            echo "{ENV_DIR}={DIR}" >> $GITHUB_ENV
+            echo "ENV_DIR={DIR}" >> $GITHUB_ENV
           done
           echo "${{ env.ENV_DIR }}"
         continue-on-error: true
