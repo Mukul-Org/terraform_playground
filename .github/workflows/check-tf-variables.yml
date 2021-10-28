@@ -4,7 +4,7 @@ name: 'BUILD - Add/Update Module Variables.tf'
 
 on:
   pull_request:
-    types: [opened, reopened]
+    types: [opened, reopened, closed]
     paths:
       - 'examples/**/variables.tf'
       - 'examples/**/README.md'
