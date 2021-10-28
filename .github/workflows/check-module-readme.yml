@@ -77,6 +77,9 @@ jobs:
       - name: stage changed files
         run: git add .
 
+      - name: set config
+        run: git config user.name "guptamukul-google"
+
       - name: commit changed files
         run: git commit -m "[WORKFLOW] Auto updating RAD-Lab Module README.md"
 
