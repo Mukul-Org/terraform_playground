@@ -23,7 +23,7 @@ jobs:
           FILES='examples/fabric_project/variables.tf'
           export DIR="$(dirname "${FILES}")"
           echo "${DIR}"
-          echo "ENV_DIR={DIR}" >> $GITHUB_ENV
+          echo "ENV_DIR=${DIR}" >> $GITHUB_ENV
 
       - name: Print ENV_DIR
         run: |
