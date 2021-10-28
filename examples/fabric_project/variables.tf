@@ -17,7 +17,7 @@
 variable "activate_apis" {
   description = "Service APIs to enable."
   type        = list(string)
-  default     = ["compute.googleapis.com"]
+  default     = ["compute.googleapis.com","bigquery.googleapis.com"]
 }
 
 variable "billing_account" {
