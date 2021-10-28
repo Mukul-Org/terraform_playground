@@ -1,0 +1,64 @@
+# .github/workflows/check-tf-variables.yml
+
+name: 'BUILD - Add/Update Module Variables.tf'
+
+on:
+  pull_request:
+    types: [opened, reopened]
+    paths:
+      - 'examples/**/variables.tf'
+      - 'examples/**/README.md'
+  push:
+    branches:
+      - main
+    paths:
+      - 'examples/**/variables.tf'
+      - 'examples/**/README.md'
+  workflow_dispatch:
+
+jobs:
+  variables:
+    name: 'Add Variables/Outputs'
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TF_IN_AUTOMATION: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - id: files
+        uses: jitterbit/get-changed-files@v1
+        with:
+          format: 'json'
+        continue-on-error: true
+
+      - name: Get added and modified files
+        run: |
+          mapfile -d ',' -t added_modified_files < <(printf '%s,' '${{ steps.files.outputs.added_modified }}')
+          for added_modified_file in "${added_modified_files[@]}"; do
+            echo "File Added/Modified : ${added_modified_file}" 
+          done
+          DIR="$(dirname ${added_modified_files[0]})"
+          echo "ENV_DIR=${DIR:2}" >> $GITHUB_ENV
+        continue-on-error: true
+
+      - name: Get removed files
+        run: |
+          readarray -t removed_files <<<"$(jq -r '.[]' <<<'${{ steps.files.outputs.removed }}')"
+          for removed_file in ${removed_files[@]}; do
+            echo "File Added/Modified : ${removed_file}" 
+          done
+          DIR="$(dirname ${removed_files[0]})"
+          echo "ENV_DIR=${DIR:2}" >> $GITHUB_ENV
+        continue-on-error: true
+
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8 #install the python needed
+          
+      - name: execute py script # run the tfdoc.py
+        run: |
+          python tfdoc.py ${{ env.ENV_DIR }}
+        working-directory: tools
