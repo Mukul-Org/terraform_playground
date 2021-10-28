@@ -58,7 +58,7 @@ jobs:
 
       - name: Manual DIR set
         run: |
-          VAR = "examples/fabric_project/variables.tf"
+          VAR = 'examples/fabric_project/variables.tf'
           export DIR="$(dirname "${VAR}")"
         continue-on-error: true
 
