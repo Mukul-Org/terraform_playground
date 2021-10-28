@@ -43,17 +43,19 @@ jobs:
         run: |
           mapfile -d ',' -t added_modified_files < <(printf '%s,' '${{ steps.files.outputs.added_modified }}')
           for added_modified_file in "${added_modified_files[@]}"; do
-            DIR="$(dirname ${added_modified_file})"
+            export DIR="$(dirname ${added_modified_file})"
             echo "Added/Modifed File ${added_modified_file} | Base Directory: ${DIR}"
           done
+          echo "::set-env name=DIR::$DIR"
 
       - name: Get removed files
         run: |
           readarray -t removed_files <<<"$(jq -r '.[]' <<<'${{ steps.files.outputs.removed }}')"
           for removed_file in ${removed_files[@]}; do
-            DIR="$(dirname ${removed_file})"
+            export DIR="$(dirname ${removed_file})"
             echo "Removed File ${removed_file} | Base Directory: ${DIR}"
           done
+          echo "::set-env name=DIR::$DIR"
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
@@ -72,7 +74,7 @@ jobs:
         shell: bash
 
       - name: Terraform Format
-        working-directory: ./${DIR}
+        working-directory: ./$DIR
         id: fmt
         run: terraform fmt -check -recursive
         continue-on-error: true
@@ -86,7 +88,7 @@ jobs:
           commenter_exitcode: ${{ steps.fmt.outputs.exitcode }}
 
       - name: Terraform Init
-        working-directory: ./${DIR}
+        working-directory: ./$DIR
         id: init
         run: terraform init
 
@@ -99,7 +101,7 @@ jobs:
           commenter_exitcode: ${{ steps.init.outputs.exitcode }}
 
       - name: Terraform Validate
-        working-directory: ./${DIR}
+        working-directory: ./$DIR
         id: validate
         run: terraform validate
 
@@ -112,7 +114,7 @@ jobs:
           commenter_exitcode: ${{ steps.validate.outputs.exitcode }}
 
       - name: Terraform Plan
-        working-directory: ./${DIR}
+        working-directory: ./$DIR
         id: plan
         run: terraform plan -out workspace.plan
         env:
