@@ -1,6 +1,6 @@
 # .github/workflows/tf-plan-comment.yml
 
-name: 'TF Plan Example Fabric Project'
+name: 'TF Plan Example'
 
 on:
   pull_request:

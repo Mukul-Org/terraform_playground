@@ -17,12 +17,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Manual DIR set
+      # - name: Manual DIR set
+      #   run: |
+      #     FILES='examples/fabric_project/variables.tf'
+      #     export DIR="$(dirname "${FILES}")"
+      #     echo "${DIR}"
+      #     echo "ENV_DIR=${DIR}" >> $GITHUB_ENV
+
+      - name: Get added and modified files
         run: |
-          FILES='examples/fabric_project/variables.tf'
-          export DIR="$(dirname "${FILES}")"
-          echo "${DIR}"
-          echo "ENV_DIR=${DIR}" >> $GITHUB_ENV
+          mapfile -d ',' -t added_modified_files < <(printf '%s,' '["examples/fabric_project/variables.tf"]')
+          for added_modified_file in "${added_modified_files[@]}"; do
+            DIR="$(dirname ${added_modified_file})"
+            echo "ENV_DIR=${DIR}" >> $GITHUB_ENV
+          done
 
       - name: Print ENV_DIR
         run: |
