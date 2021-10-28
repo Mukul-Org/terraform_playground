@@ -33,7 +33,7 @@ jobs:
           done
           echo "${added_modified_files[0]}"
           DIR="$(dirname ${added_modified_files[0]})"
-          DIR = $DIR | cut -c 3-
+          DIR = ${DIR:2}
           echo "ENV_DIR=${DIR}" >> $GITHUB_ENV
 
       - name: Print ENV_DIR
