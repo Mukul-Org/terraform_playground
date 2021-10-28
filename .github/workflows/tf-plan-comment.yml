@@ -33,11 +33,13 @@ jobs:
           URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${{ github.event.pull_request.number }}/files"
           FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
           echo $FILES
+        continue-on-error: true
 
       - id: files
         uses: jitterbit/get-changed-files@v1
         with:
           format: 'json'
+        continue-on-error: true
 
       - name: Get added and modified files
         run: |
@@ -45,6 +47,7 @@ jobs:
           for added_modified_file in "${added_modified_files[@]}"; do
             export DIR="$(dirname "${added_modified_file}")"
           done
+        continue-on-error: true
 
       - name: Get removed files
         run: |
@@ -57,6 +60,7 @@ jobs:
         run: |
           VAR = "examples/fabric_project/variables.tf"
           export DIR="$(dirname "${VAR}")"
+        continue-on-error: true
 
       - name: Print DIR
         run: |
