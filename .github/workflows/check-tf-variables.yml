@@ -57,7 +57,12 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.8 #install the python needed
-          
+
+      - name: setup requirements.txt
+        run: |
+          pip install -r requirements.txt
+        working-directory: tools
+
       - name: execute py script # run the tfdoc.py
         run: |
           python tfdoc.py ${{ env.ENV_DIR }}
