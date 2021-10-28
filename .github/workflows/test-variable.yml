@@ -3,7 +3,6 @@
 name: '[TEST] TF Plan Example Fabric Project'
 
 on:
-  push:
   workflow_dispatch:
 
 jobs:
