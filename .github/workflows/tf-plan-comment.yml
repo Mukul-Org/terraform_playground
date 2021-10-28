@@ -55,12 +55,12 @@ jobs:
           for removed_file in ${removed_files[@]}; do
             export DIR="$(dirname "${removed_file}")"
           done
-
-      - name: Manual DIR set
-        run: |
-          VAR = 'examples/fabric_project/variables.tf'
-          export DIR="$(dirname "${VAR}")"
         continue-on-error: true
+
+      # - name: Manual DIR set
+      #   run: |
+      #     VAR='examples/fabric_project/variables.tf'
+      #     export DIR="$(dirname "${VAR}")"
 
       - name: Print DIR
         run: |
