@@ -1,6 +1,6 @@
-# .github/workflows/check-module-readme.yml
+# .github/workflows/build-module-readme.yml
 
-name: 'BUILD - Auto update Module README.md'
+name: 'BUILD - Module README.md'
 
 on:
   # pull_request:
@@ -69,7 +69,7 @@ jobs:
         working-directory: tools
 
       - name: switching from HTTPS to SSH
-        run: git remote set-url origin ${{ secrets.SSH_KEY }}
+        run: git remote set-url origin git@github.com:Mukul-Org/terraform_playground.git
 
       - name: check for changes
         run: git status
