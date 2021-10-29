@@ -69,7 +69,7 @@ jobs:
         working-directory: tools
 
       - name: switching from HTTPS to SSH
-        run: git remote set-url origin git@github.com:Mukul-Org/terraform_playground.git
+        run: git remote set-url origin ${{ secrets.SSH_KEY }}
 
       - name: check for changes
         run: git status
