@@ -22,7 +22,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.WORKFLOW_PAT }}
 
       - id: files
         uses: jitterbit/get-changed-files@v1
