@@ -20,6 +20,6 @@ This example illustrates how to create a simple project using the `fabric-projec
 | name | description | sensitive |
 |---|---|:---:|
 | name | The name of the created project. |  |
-| project_id | The project id of the created project. |  |
+| project_id | The project ID of the created project. |  |
 | project_number | The project number of the created project. |  |
 <!-- END TFDOC -->
