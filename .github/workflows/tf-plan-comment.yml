@@ -25,31 +25,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: List Updated files
-        id: getfile
-        run: |
-          URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${{ github.event.pull_request.number }}/files"
-          FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
-          echo "::set-output name=file::$FILES"
-
-      # - name: get changed files
-      #   id: getfile
-      #   run: |
-      #     echo "::set-output name=files::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | xargs)"
-
-      - name: echo output
-        run: |
-          echo ${{ steps.getfile.outputs.file }}
-
-      - name: Get updated files
-        run: |
-          readarray -t added_modified_files <<<"$(jq -r '.[]' <<<'${{ steps.getfile.outputs.file }}')"
-          for added_modified_file in "${added_modified_files[@]}"; do
-            echo "File Added/Modified : ${added_modified_file}" 
-          done
-          DIR="$(dirname ${added_modified_files[0]})"
-          echo "ENV_DIR=${DIR}" >> $GITHUB_ENV
-
       - id: files
         uses: jitterbit/get-changed-files@v1
         with:
