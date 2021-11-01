@@ -15,7 +15,7 @@
  */
 
 output "project_id" {
-  description = "The project ID of the created project."
+  description = "The project id of the created project."
   value       = module.fabric-project.project_id
 }
 
