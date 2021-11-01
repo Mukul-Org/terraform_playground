@@ -68,8 +68,8 @@ jobs:
 
       - name: commit files
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --local user.email ${{ secrets.WORKFLOW_EMAIL }}
+          git config --local user.name ${{ secrets.WORKFLOW_USERNAME }}
           git add -A
           git commit -m "[WORKFLOW] Auto updating RAD-Lab Module README.md" -a
 
