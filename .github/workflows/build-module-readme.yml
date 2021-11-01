@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        # with:
+        #   token: ${{ secrets.PAT }}
 
       - id: files
         uses: jitterbit/get-changed-files@v1
@@ -92,8 +94,8 @@ jobs:
 
       - name: commit files
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --local user.email "guptamukul@google.com"
+          git config --local user.name "guptamukul-google"
           git add -A
           git commit -m "[WORKFLOW] Auto updating RAD-Lab Module README.md" -a
 
