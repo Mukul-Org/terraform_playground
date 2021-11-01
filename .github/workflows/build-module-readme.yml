@@ -3,17 +3,12 @@
 name: 'BUILD - Module README.md'
 
 on:
-  # pull_request:
-  #   types: [opened, reopened, closed]
-  #   paths:
-  #     - 'examples/**/variables.tf'
-  #     - 'examples/**/README.md'
   push:
     branches:
       - main
     paths:
       - 'examples/**/variables.tf'
-      - 'examples/**/README.md'
+      - 'examples/**/outputs.tf'
   workflow_dispatch:
 
 jobs:
@@ -70,27 +65,6 @@ jobs:
         run: |
           python tfdoc.py ${GITHUB_WORKSPACE}/${{ env.ENV_DIR }}
         working-directory: tools
-
-      # - name: switching from HTTPS to SSH
-      #   run: git remote set-url origin git@github.com:Mukul-Org/terraform_playground.git
-
-      # - name: check for changes
-      #   run: git status
-
-      # - name: stage changed files
-      #   run: git add .
-
-      # - name: set config
-      #   run: git config user.name "guptamukul-google"
-
-      # - name: commit changed files
-      #   run: git commit -m "[WORKFLOW] Auto updating RAD-Lab Module README.md"
-
-      # - name: fetch from main
-      #   run: git fetch origin main
-
-      # - name: push code to main
-      #   run: git push origin HEAD:main
 
       - name: commit files
         run: |
