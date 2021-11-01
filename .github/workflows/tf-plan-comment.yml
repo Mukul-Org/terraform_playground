@@ -39,7 +39,7 @@ jobs:
 
       - name: echo output
         run: |
-          echo ${{ steps.getfile.outputs.files }}
+          echo ${{ steps.getfile.outputs.file }}
 
       - name: Get updated files
         run: |
