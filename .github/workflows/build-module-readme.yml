@@ -24,6 +24,21 @@ jobs:
         with:
           token: ${{ secrets.WORKFLOW_PAT }}
 
+      # - name: List Updated files
+      #   run: |
+      #     URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${{ github.event.pull_request.number }}/files"
+      #     FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
+      #     echo $FILES
+
+      - name: get changed files
+        id: getfile
+        run: |
+          echo "::set-output name=files::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | xargs)"
+
+      - name: echo output
+        run: |
+          echo ${{ steps.getfile.outputs.files }}
+
       - id: files
         uses: jitterbit/get-changed-files@v1
         with:
