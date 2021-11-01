@@ -92,8 +92,8 @@ jobs:
 
       - name: commit files
         run: |
-          git config --local user.email "guptamukul@google.com"
-          git config --local user.name "guptamukul-google"
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
           git add -A
           git commit -m "[WORKFLOW] Auto updating RAD-Lab Module README.md" -a
 
