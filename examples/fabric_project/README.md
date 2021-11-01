@@ -15,4 +15,11 @@ This example illustrates how to create a simple project using the `fabric-projec
 | *owners* | Optional list of IAM-format members to set as project owners. | <code title="list&#40;string&#41;">list(string)</code> |  | <code title="">[]</code> |
 | *prefix* | Prefix prepended to project name, uses random id by default. | <code title="">string</code> |  | <code title=""></code> |
 
+## Outputs
+
+| name | description | sensitive |
+|---|---|:---:|
+| name | The name of the created project. |  |
+| project_id | The project id of the created project. |  |
+| project_number | The project number of the created project. |  |
 <!-- END TFDOC -->
