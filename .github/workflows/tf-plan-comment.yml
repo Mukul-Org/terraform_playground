@@ -25,12 +25,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      # - name: List Updated files
-      #   run: |
-      #     URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${{ github.event.pull_request.number }}/files"
-      #     FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
-      #     echo $FILES
-      
+      - name: List Updated files
+        run: |
+          URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${{ github.event.pull_request.number }}/files"
+          FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
+          echo $FILES
+
       - name: get changed files
         id: getfile
         run: |
