@@ -66,7 +66,7 @@ jobs:
                                    {
                                      "keyValue": {
                                           "topLabel": "Status",
-                                          "content": "- ${{ join(github.event.issue.action) }}"
+                                          "content": "- ${{ join(github.event.issue.types) }}"
                                       }
                                    },
                                    {
@@ -142,7 +142,7 @@ jobs:
                                    {
                                      "keyValue": {
                                           "topLabel": "Status",
-                                          "content": "- ${{ join(github.event.pull_request.action) }}"
+                                          "content": "- ${{ join(github.event.pull_request.types) }}"
                                       }
                                    },
                                    {
