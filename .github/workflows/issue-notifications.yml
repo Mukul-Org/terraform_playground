@@ -1,6 +1,6 @@
 # .github/workflows/issue-notifications.yml
 
-name: NOTIF - RAD Lab Issue Creation
+name: BUILD - RAD Lab Notifications
 on:
   issues:
     types: [opened]
