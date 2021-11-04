@@ -1,4 +1,4 @@
-# .github/workflows/issue-notifications.yml
+# .github/workflows/notifications.yml
 
 name: BUILD - RAD Lab Notifications
 on:
