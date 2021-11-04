@@ -32,7 +32,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
+        with:
+          token: ${{ secrets.WORKFLOW_PAT }}
+          
       - name: setup python
         uses: actions/setup-python@v2
         with:

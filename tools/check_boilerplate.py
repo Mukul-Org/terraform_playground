@@ -55,7 +55,8 @@ def main(dir):
   if errors:
     print('The following files are missing the license boilerplate:')
     print('\n'.join(' - {}'.format(s) for s in errors))
-    sys.exit(1)
+    return '\n'.join(' - {}'.format(s) for s in errors)
+    # sys.exit(1)
 
 
 if __name__ == '__main__':
