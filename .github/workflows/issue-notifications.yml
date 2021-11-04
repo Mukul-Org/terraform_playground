@@ -63,6 +63,7 @@ jobs:
                                           "content": "- ${{ join(github.event.issue.assignees.*.login) }}"
                                       }
                                    },
+                                   {
                                      "keyValue": {
                                           "topLabel": "Status",
                                           "content": "- ${{ join(github.event.issue.action) }}"
@@ -138,6 +139,7 @@ jobs:
                                           "content": "- ${{ join(github.event.pull_request.assignees.*.login) }}"
                                       }
                                    },
+                                   {
                                      "keyValue": {
                                           "topLabel": "Status",
                                           "content": "- ${{ join(github.event.pull_request.action) }}"
