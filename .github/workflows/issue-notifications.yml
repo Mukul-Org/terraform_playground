@@ -3,11 +3,11 @@
 name: BUILD - RAD Lab Notifications
 on:
   issues:
-    types: [opened, reopened, closed]
+    types: [opened, reopened]
   pull_request:
     branches:
       - main
-    types: [opened, review_requested, closed]
+    types: [opened]
 
 jobs:
   build:
@@ -61,12 +61,6 @@ jobs:
                                      "keyValue": {
                                           "topLabel": "Assignees",
                                           "content": "- ${{ join(github.event.issue.assignees.*.login) }}"
-                                      }
-                                   },
-                                   {
-                                     "keyValue": {
-                                          "topLabel": "Status",
-                                          "content": "- ${{ join(github.event.issue.types) }}"
                                       }
                                    },
                                    {
@@ -137,12 +131,6 @@ jobs:
                                      "keyValue": {
                                           "topLabel": "Assignees",
                                           "content": "- ${{ join(github.event.pull_request.assignees.*.login) }}"
-                                      }
-                                   },
-                                   {
-                                     "keyValue": {
-                                          "topLabel": "Status",
-                                          "content": "- ${{ join(github.event.pull_request.types) }}"
                                       }
                                    },
                                    {
