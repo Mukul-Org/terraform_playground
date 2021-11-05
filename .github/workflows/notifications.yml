@@ -24,6 +24,7 @@ jobs:
           echo "Issue body: ${{ github.event.issue.body }}"
           echo "Assigned labels: " ${{ join(github.event.issue.labels.*.name) }}
           echo "Assignees: " ${{ join(github.event.issue.assignees.*.login) }}
+      continue-on-error: true
     - name: Google Chat Notification - Issue
       if: github.event_name == 'issues'
       run: |
@@ -83,6 +84,7 @@ jobs:
                   }
               ]
           }'
+      continue-on-error: true
 
     - name: Git Pull Request Details
       if: github.event_name == 'pull_request'
@@ -94,6 +96,7 @@ jobs:
           echo "PR body: ${{ github.event.pull_request.body }}"
           echo "Assigned labels: " ${{ join(github.event.pull_request.labels.*.name) }}
           echo "Assignees: " ${{ join(github.event.pull_request.assignees.*.login) }}
+      continue-on-error: true
     - name: Google Chat Notification - Pull Request
       if: github.event_name == 'pull_request'
       run: |
@@ -153,3 +156,4 @@ jobs:
                   }
               ]
           }'
+      continue-on-error: true

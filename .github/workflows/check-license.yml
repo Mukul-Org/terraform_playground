@@ -71,3 +71,4 @@ jobs:
               repo: context.repo.repo,
               body: "The following files are missing the license boilerplate:\n ${{ steps.boilerplate.outputs.files }}" 
             })
+            exit 1
