@@ -20,6 +20,11 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
+    types: [opened]
+
   workflow_dispatch:
 
 jobs:
@@ -32,8 +37,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          token: ${{ secrets.WORKFLOW_PAT }}
+        # with:
+        #   token: ${{ secrets.WORKFLOW_PAT }}
 
       - name: setup python
         uses: actions/setup-python@v2
@@ -62,10 +67,10 @@ jobs:
       - name: test comment
         run: | 
           curl -v -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/user
-          
+
       - name: 'Comment PR'
         uses: actions/github-script@0.3.0
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' or github.event_name == 'pull_request' 
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
