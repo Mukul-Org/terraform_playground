@@ -68,3 +68,4 @@ jobs:
             enter=$'\n'
             const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
             github.issues.createComment({ issue_number, owner, repo, body: "The following files are missing the license boilerplate:$enter${{ steps.boilerplate.outputs.files }}" });
+            exit 1
