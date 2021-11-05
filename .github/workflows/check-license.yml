@@ -17,10 +17,9 @@
 name: 'BUILD - Check Lisence Boilerplate'
 
 on:
-  pull_request:
+  push:
     branches:
       - main
-    types: [opened, reopened]
   workflow_dispatch:
 
 jobs:
@@ -33,8 +32,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        # with:
-        #   token: ${{ secrets.WORKFLOW_PAT }}
+        with:
+          token: ${{ secrets.WORKFLOW_PAT }}
 
       - name: setup python
         uses: actions/setup-python@v2
