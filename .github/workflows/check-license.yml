@@ -56,7 +56,7 @@ jobs:
 
       - name: print output
         run: |
-          echo "The following files are missing the license boilerplate:\n${{ steps.boilerplate.outputs.files }}"
+          echo "The following files are missing the license boilerplate:$'\n'${{ steps.boilerplate.outputs.files }}"
 
       - name: 'Comment PR'
         uses: actions/github-script@0.3.0
