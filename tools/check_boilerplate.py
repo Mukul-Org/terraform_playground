@@ -56,10 +56,11 @@ def main(dir):
     print('The following files are missing the license boilerplate:')
     print('\n'.join(' - {}'.format(s) for s in errors))
     return '\n'.join(' - {}'.format(s) for s in errors)
-    # sys.exit(1)
 
 
 if __name__ == '__main__':
   if len(sys.argv) != 2:
     raise SystemExit('No directory passed.')
-  main(sys.argv[1])
+  resp = main(sys.argv[1])
+  if(resp == ""):
+    sys.exit(1)
