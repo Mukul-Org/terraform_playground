@@ -56,7 +56,7 @@ jobs:
 
       - name: print output
         run: |
-          echo "${{ steps.boilerplate.outputs.files }}"
+          echo "The following files are missing the license boilerplate:\n${{ steps.boilerplate.outputs.files }}"
 
       - name: 'Comment PR'
         uses: actions/github-script@0.3.0
@@ -65,4 +65,4 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
-            github.issues.createComment({ issue_number, owner, repo, body: "${{ steps.boilerplate.outputs.files }}" });
+            github.issues.createComment({ issue_number, owner, repo, body: "The following files are missing the license boilerplate:\n${{ steps.boilerplate.outputs.files }}" });
