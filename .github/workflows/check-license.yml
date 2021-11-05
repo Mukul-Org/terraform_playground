@@ -24,7 +24,14 @@ on:
     branches:
       - main
     types: [opened]
-
+    paths:
+      - '**.js'
+      - '**Dockerfile'
+      - '**.py'
+      - '**.sh'
+      - '**.tf'
+      - '**.yaml'
+      - '**.yml'
   workflow_dispatch:
 
 jobs:
