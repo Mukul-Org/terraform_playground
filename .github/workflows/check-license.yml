@@ -66,17 +66,11 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             enter=$'\n'
-            const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
-            github.issues.createComment({ 
-              issue_number, 
-              owner, 
-              repo, 
+            # const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
+            github.issues.createComment({
+              issue_number: ${{ github.event.number }},
+              owner: context.repo.owner,
+              repo: context.repo.repo,
               body: "The following files are missing the license boilerplate:$enter${{ steps.boilerplate.outputs.files }}" 
-            });
-            # github.issues.createComment({
-            #   issue_number: ${{ github.event.number }},
-            #   owner: context.repo.owner,
-            #   repo: context.repo.repo,
-            #   body: body
-            # })
+            })
             # exit 1
