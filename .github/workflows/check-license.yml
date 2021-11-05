@@ -59,9 +59,13 @@ jobs:
           enter=$'\n'
           echo "The following files are missing the license boilerplate:$enter${{ steps.boilerplate.outputs.files }}"
 
+      - name: test comment
+        run: | 
+          curl -v -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/user
+          
       - name: 'Comment PR'
         uses: actions/github-script@0.3.0
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'push'
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
