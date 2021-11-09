@@ -83,7 +83,7 @@ def commentpr(GITHUB_REPOSITORY, pr, comment, TOKEN):
     headers = {'Authorization': f'token {TOKEN}'}
     print(comment)
     # data = {"body" : comment}
-    data = {'body' : 'comment' }
+    data = '{body" : "comment" }'
     response  = requests.post('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/issues/'+ str(pr) +'/comments', data=data, headers=headers)
     print(response.text)
 
