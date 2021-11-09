@@ -46,11 +46,11 @@ def open_pr(GITHUB_REPOSITORY, TOKEN, GITHUB_WORKSPACE):
             files = lisencecheck(GITHUB_WORKSPACE)
             # print(files)
             if files:
-                print("list is not empty")
-                comment = 'Apache 2.0 Lisence check failed!'
-                # for x in range(len(files)):
+                # print("list is not empty")
+                comment = 'Apache 2.0 Lisence check failed!\n\nThe following files are missing the license boilerplate:'
+                for x in range(len(files)):
                     # print (files[x])
-                    # comment = comment + '\n' + files[x]
+                    comment = comment + '\n' + files[x]
             else:
                 print("list is empty")
                 comment = 'Apache 2.0 Lisence check successful!'
@@ -76,7 +76,7 @@ def checkmindiff(pr_created_at):
 
 def lisencecheck(GITHUB_WORKSPACE):
     files = check_boilerplate.main(GITHUB_WORKSPACE)
-    print(files)
+    # print(files)
     return files
 
 def commentpr(GITHUB_REPOSITORY, pr, comment, TOKEN):
