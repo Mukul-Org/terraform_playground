@@ -15,7 +15,7 @@
 # limitations under the License.
 
 import os
-import sys
+import json
 import requests
 import datetime
 import check_boilerplate
@@ -24,11 +24,8 @@ import dateutil.parser
 from pytz import timezone
 
 IGNOREPRABOVEMINUTES = 7000
-# GITHUB_REPOSITORY = 'GoogleCloudPlatform/rad-lab'
-# GITHUB_REPOSITORY = 'Mukul-Org/terraform_playground'
 
 def main():
-    # TOKEN = os.getenv('GITHUB_TOKEN', '...')
 
     TOKEN             = os.getenv('GITHUB_TOKEN')
     GITHUB_WORKSPACE  = os.getenv('GITHUB_WORKSPACE')
@@ -47,11 +44,10 @@ def open_pr(GITHUB_REPOSITORY, TOKEN, GITHUB_WORKSPACE):
             # print(files)
             if files:
                 # print("list is not empty")
-                # comment = 'Apache 2.0 Lisence check failed!\n\nThe following files are missing the license boilerplate:'
-                comment = 'Apache 2.0 Lisence check failed!'
-                # for x in range(len(files)):
-                #     # print (files[x])
-                #     comment = comment + '\n' + files[x].replace(GITHUB_WORKSPACE, ".")
+                comment = 'Apache 2.0 Lisence check failed!\n\nThe following files are missing the license boilerplate:\n'
+                for x in range(len(files)):
+                    # print (files[x])
+                    comment = comment + '\n' + files[x].replace(GITHUB_WORKSPACE, ".")
             else:
                 # print("list is empty")
                 comment = 'Apache 2.0 Lisence check successful!'
@@ -84,8 +80,7 @@ def commentpr(GITHUB_REPOSITORY, pr, comment, TOKEN):
     headers = {'Authorization': f'token {TOKEN}', 'Accept': 'application/vnd.github.v3+json'}
     print(comment)
     data = {"body":comment}
-    # data = '{"body":"comment"}'
-    response  = requests.post('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/issues/'+ str(pr) +'/comments', data=data, headers=headers)
+    response  = requests.post('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/issues/'+ str(pr) +'/comments', data=json.dumps(data), headers=headers)
     print(response.text)
 
 if __name__ == '__main__':
