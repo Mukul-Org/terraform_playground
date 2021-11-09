@@ -33,11 +33,12 @@ def main(GITHUB_REPOSITORY):
 
 def open_pr(GITHUB_REPOSITORY):
     response = requests.get('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/pulls')
-    print(type(response.json()))
+    # print(type(response.json()))
     for pr in response.json():
         print(type(pr))
-        pr_created_at = pr['created_at']
-        if(checkmindiff(pr_created_at)):
+        # print(type(pr['created_at']))
+        print(pr['created_at'])
+        if(checkmindiff(pr['created_at'])):
             print('PR # ' + str(pr['number']) + ' : Run Licence check...')
             lisencecheck(GITHUB_REPOSITORY)
         else:
@@ -46,7 +47,6 @@ def open_pr(GITHUB_REPOSITORY):
             if lisencecheck(GITHUB_REPOSITORY):
                 print("list is not empty")
                 comment = 'Apache 2.0 Lisence check failed!'
-
             else:
                 print("list is empty")
                 comment = 'Apache 2.0 Lisence check successful!'
