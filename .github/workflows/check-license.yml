@@ -63,8 +63,7 @@ jobs:
       - name: execute py script # run the check_recent_pr.py
         id: boilerplate
         run: |
-          output=$(python check_recent_pr.py ${GITHUB_WORKSPACE})
-          echo "::set-output name=files::$output"
+          python check_recent_pr.py ${GITHUB_WORKSPACE}
         working-directory: tools
         continue-on-error: true
 
