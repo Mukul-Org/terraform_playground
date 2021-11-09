@@ -63,6 +63,7 @@ jobs:
       - name: execute py script # run the check_recent_pr.py
         id: boilerplate
         run: |
+          echo $GITHUB_WORKSPACE
           python check_recent_pr.py ${GITHUB_WORKSPACE}
         working-directory: tools
         continue-on-error: true
