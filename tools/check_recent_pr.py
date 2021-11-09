@@ -28,14 +28,14 @@ IGNOREPRABOVEMINUTES = 5
 # GITHUB_REPOSITORY = 'Mukul-Org/terraform_playground'
 
 def main(GITHUB_REPOSITORY):
-    print("Current DIR: " + os.path.dirname(os.getcwd()))
+    # print("Current DIR: " + os.path.dirname(os.getcwd()))
     open_pr(GITHUB_REPOSITORY)
 
 def open_pr(GITHUB_REPOSITORY):
     response = requests.get('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/pulls')
-
+    print(type(response.json()))
     for pr in response.json():
-
+        print(type(pr))
         if(checkmindiff(pr["created_at"])):
 
             print('PR # ' + str(pr["number"]) + ' : Run Licence check...')
@@ -76,7 +76,6 @@ def lisencecheck(GITHUB_REPOSITORY):
     return files
 
 def commentpr(GITHUB_REPOSITORY, pr, comment):
-    print("comment PR")
     response  = requests.post('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/issues/'+ str(pr) +'/comments', data = comment)
     print(response.text)
 
