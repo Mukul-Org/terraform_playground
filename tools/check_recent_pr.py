@@ -36,12 +36,12 @@ def open_pr(GITHUB_REPOSITORY):
     print(type(response.json()))
     for pr in response.json():
         print(type(pr))
-        if(checkmindiff(pr["created_at"])):
+        if(checkmindiff(pr['created_at'])):
 
-            print('PR # ' + str(pr["number"]) + ' : Run Licence check...')
+            print('PR # ' + str(pr['number']) + ' : Run Licence check...')
             lisencecheck(GITHUB_REPOSITORY)
         else:
-            print('PR # ' + str(pr["number"]) + ' : Skip Licence check...')
+            print('PR # ' + str(pr['number']) + ' : Skip Licence check...')
             # if lisencecheck(os.path.dirname(os.getcwd())):
             if lisencecheck(GITHUB_REPOSITORY):
                 print("list is not empty")
@@ -52,7 +52,7 @@ def open_pr(GITHUB_REPOSITORY):
                 comment = 'Apache 2.0 Lisence check successful!'
 
         # comment PR
-        commentpr(GITHUB_REPOSITORY, pr["number"], comment)
+        commentpr(GITHUB_REPOSITORY, pr['number'], comment)
 
 def checkmindiff(pr_created_at):
     now = datetime.datetime.now().astimezone(timezone('America/Los_Angeles'))
