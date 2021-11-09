@@ -27,19 +27,13 @@ IGNOREPRABOVEMINUTES = 5
 # GITHUB_REPOSITORY = 'GoogleCloudPlatform/rad-lab'
 # GITHUB_REPOSITORY = 'Mukul-Org/terraform_playground'
 
-def main(GITHUB_REPOSITORY):
+def main(GITHUB_REPOSITORY, TOKEN):
     # print("Current DIR: " + os.path.dirname(os.getcwd()))
-    open_pr(GITHUB_REPOSITORY)
+    open_pr(GITHUB_REPOSITORY, TOKEN)
 
-def open_pr(GITHUB_REPOSITORY):
+def open_pr(GITHUB_REPOSITORY, TOKEN):
     response = requests.get('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/pulls')
-    print(type(response.json()))
-    print(response.json())
     for pr in response.json():
-        print(type(pr))
-        print(pr)
-        print(type(pr['created_at']))
-        print(pr['created_at'])
         if(checkmindiff(pr['created_at'])):
             print('PR # ' + str(pr['number']) + ' : Run Licence check...')
             lisencecheck(GITHUB_REPOSITORY)
@@ -54,7 +48,7 @@ def open_pr(GITHUB_REPOSITORY):
                 comment = 'Apache 2.0 Lisence check successful!'
 
         # comment PR
-        commentpr(GITHUB_REPOSITORY, pr['number'], comment)
+        commentpr(GITHUB_REPOSITORY, pr['number'], comment, TOKEN)
 
 def checkmindiff(pr_created_at):
     now = datetime.datetime.now().astimezone(timezone('America/Los_Angeles'))
@@ -77,11 +71,12 @@ def lisencecheck(GITHUB_REPOSITORY):
     #     print (files[x])
     return files
 
-def commentpr(GITHUB_REPOSITORY, pr, comment):
-    response  = requests.post('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/issues/'+ str(pr) +'/comments', data = comment)
+def commentpr(GITHUB_REPOSITORY, pr, comment, TOKEN):
+    headers = {'Authorization': 'token ' + TOKEN}
+    response  = requests.post('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/issues/'+ str(pr) +'/comments', data = comment, headers=headers)
     print(response.text)
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-      raise SystemExit('No repository passed.')
-    main(sys.argv[1])
+    if len(sys.argv) != 3:
+      raise SystemExit('No repository or No token passed.')
+    main(sys.argv[1],sys.argv[2])
