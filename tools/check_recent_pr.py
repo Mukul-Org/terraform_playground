@@ -36,8 +36,8 @@ def open_pr(GITHUB_REPOSITORY):
     print(type(response.json()))
     for pr in response.json():
         print(type(pr))
-        if(checkmindiff(pr['created_at'])):
-
+        pr_created_at = pr['created_at']
+        if(checkmindiff(pr_created_at)):
             print('PR # ' + str(pr['number']) + ' : Run Licence check...')
             lisencecheck(GITHUB_REPOSITORY)
         else:
