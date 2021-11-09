@@ -34,8 +34,11 @@ def main():
     open_pr(GITHUB_REPOSITORY, TOKEN, GITHUB_WORKSPACE)
 
 def open_pr(GITHUB_REPOSITORY, TOKEN, GITHUB_WORKSPACE):
-    
-    response = requests.get('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/pulls')
+
+    try:
+        response = requests.get('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/pulls')
+    except requests.exceptions.RequestException as e: 
+        raise SystemExit(e)
 
     for pr in response.json():
         if(checkmindiff(pr['created_at'])):
@@ -83,10 +86,15 @@ def lisencecheck(GITHUB_WORKSPACE):
 
 def commentpr(GITHUB_REPOSITORY, pr, comment, TOKEN):
     headers = {'Authorization': f'token {TOKEN}', 'Accept': 'application/vnd.github.v3+json'}
-    print(comment)
+    # print(comment)
     data = {"body":comment}
-    response  = requests.post('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/issues/'+ str(pr) +'/comments', data=json.dumps(data), headers=headers)
-    print(response.text)
+    try:
+        response  = requests.post('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/issues/'+ str(pr) +'/comments', data=json.dumps(data), headers=headers)
+        # print(response.text)
+    except requests.exceptions.RequestException as e: 
+        raise SystemExit(e)
+
+
 
 if __name__ == '__main__':
     main()
