@@ -50,7 +50,7 @@ def open_pr(GITHUB_REPOSITORY, TOKEN, GITHUB_WORKSPACE):
                 comment = 'Apache 2.0 Lisence check failed!\n\nThe following files are missing the license boilerplate:'
                 for x in range(len(files)):
                     # print (files[x])
-                    comment = comment + '\n' + files[x]
+                    comment = comment + '\n' + files[x].replace(GITHUB_WORKSPACE, "")
             else:
                 print("list is empty")
                 comment = 'Apache 2.0 Lisence check successful!'
@@ -82,7 +82,8 @@ def lisencecheck(GITHUB_WORKSPACE):
 def commentpr(GITHUB_REPOSITORY, pr, comment, TOKEN):
     headers = {'Authorization': f'token {TOKEN}'}
     print(comment)
-    data = {"body" : comment}
+    # data = {"body" : comment}
+    data = {"body" : "comment"}
     response  = requests.post('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/issues/'+ str(pr) +'/comments', data=data, headers=headers)
     print(response.text)
 
