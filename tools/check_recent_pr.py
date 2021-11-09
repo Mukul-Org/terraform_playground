@@ -47,10 +47,11 @@ def open_pr(GITHUB_REPOSITORY, TOKEN, GITHUB_WORKSPACE):
             # print(files)
             if files:
                 # print("list is not empty")
-                comment = 'Apache 2.0 Lisence check failed!\n\nThe following files are missing the license boilerplate:'
-                for x in range(len(files)):
-                    # print (files[x])
-                    comment = comment + '\n' + files[x].replace(GITHUB_WORKSPACE, ".")
+                # comment = 'Apache 2.0 Lisence check failed!\n\nThe following files are missing the license boilerplate:'
+                comment = 'Apache 2.0 Lisence check failed!'
+                # for x in range(len(files)):
+                #     # print (files[x])
+                #     comment = comment + '\n' + files[x].replace(GITHUB_WORKSPACE, ".")
             else:
                 # print("list is empty")
                 comment = 'Apache 2.0 Lisence check successful!'
