@@ -28,7 +28,7 @@ IGNOREPRABOVEMINUTES = 5
 # GITHUB_REPOSITORY = 'Mukul-Org/terraform_playground'
 
 def main(GITHUB_REPOSITORY, TOKEN):
-    # print("Current DIR: " + os.path.dirname(os.getcwd()))
+    print(TOKEN)
     open_pr(GITHUB_REPOSITORY, TOKEN)
 
 def open_pr(GITHUB_REPOSITORY, TOKEN):
