@@ -31,14 +31,7 @@ def main():
     GITHUB_WORKSPACE  = os.getenv('GITHUB_WORKSPACE')
     GITHUB_REPOSITORY = os.getenv('GITHUB_REPOSITORY')
 
-    open_pr(GITHUB_REPOSITORY, TOKEN, GITHUB_WORKSPACE)
-
-def open_pr(GITHUB_REPOSITORY, TOKEN, GITHUB_WORKSPACE):
-
-    try:
-        response = requests.get('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/pulls')
-    except requests.exceptions.RequestException as e: 
-        raise SystemExit(e)
+    response = open_pr(GITHUB_REPOSITORY)
 
     for pr in response.json():
         if(checkmindiff(pr['created_at'])):
@@ -46,14 +39,12 @@ def open_pr(GITHUB_REPOSITORY, TOKEN, GITHUB_WORKSPACE):
             files = lisencecheck(GITHUB_WORKSPACE)
             # print(files)
             if files:
-                # print("list is not empty")
                 comment = 'Apache 2.0 Lisence check failed!\n\nThe following files are missing the license boilerplate:\n'
                 for x in range(len(files)):
                     # print (files[x])
                     comment = comment + '\n' + files[x].replace(GITHUB_WORKSPACE, ".")
                     status = 'fail'
             else:
-                # print("list is empty")
                 comment = 'Apache 2.0 Lisence check successful!'
                 status = 'pass'
         else:
@@ -64,6 +55,13 @@ def open_pr(GITHUB_REPOSITORY, TOKEN, GITHUB_WORKSPACE):
 
         if(status == 'fail'):
             raise ValueError('Apache 2.0 Lisence check failed!')
+
+def open_pr(GITHUB_REPOSITORY):
+    try:
+        response = requests.get('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/pulls')
+        return response
+    except requests.exceptions.RequestException as e: 
+        raise SystemExit(e)
 
 def checkmindiff(pr_created_at):
     now = datetime.datetime.now().astimezone(timezone('America/Los_Angeles'))
