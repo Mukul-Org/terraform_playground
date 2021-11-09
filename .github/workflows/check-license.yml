@@ -17,21 +17,23 @@
 name: 'BUILD - Check Lisence Boilerplate'
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-    types: [opened]
-    paths:
-      - '**.js'
-      - '**Dockerfile'
-      - '**.py'
-      - '**.sh'
-      - '**.tf'
-      - '**.yaml'
-      - '**.yml'
+  # schedule:
+  #   - cron:  '*/5 * * * *' 
+  # push:
+  #   branches:
+  #     - main
+  # pull_request:
+  #   branches:
+  #     - main
+  #   types: [opened]
+  #   paths:
+  #     - '**.js'
+  #     - '**Dockerfile'
+  #     - '**.py'
+  #     - '**.sh'
+  #     - '**.tf'
+  #     - '**.yaml'
+  #     - '**.yml'
   workflow_dispatch:
 
 jobs:
@@ -44,8 +46,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        # with:
-        #   token: ${{ secrets.WORKFLOW_PAT }}
+        with:
+          token: ${{ secrets.WORKFLOW_PAT }}
 
       - name: setup python
         uses: actions/setup-python@v2
@@ -58,32 +60,32 @@ jobs:
           pip install -r requirements.txt
         working-directory: tools
 
-      - name: execute py script # run the check_boilerplate.py
+      - name: execute py script # run the check_recent_pr.py
         id: boilerplate
         run: |
-          output=$(python check_boilerplate.py ${GITHUB_WORKSPACE})
+          output=$(python check_recent_pr.py ${GITHUB_WORKSPACE})
           echo "::set-output name=files::$output"
         working-directory: tools
         continue-on-error: true
 
-      - name: print output
-        run: |
-          enter=$'\n'
-          echo "The following files are missing the license boilerplate:$enter${{ steps.boilerplate.outputs.files }}"
+      # - name: print output
+      #   run: |
+      #     enter=$'\n'
+      #     echo "The following files are missing the license boilerplate:$enter${{ steps.boilerplate.outputs.files }}"
 
-      - name: test comment
-        run: | 
-          curl -v -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/user
+      # - name: test comment
+      #   run: | 
+      #     curl -v -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/user
 
-      - name: 'Comment PR'
-        uses: actions/github-script@0.3.0
-        if: github.event_name == 'push' || github.event_name == 'pull_request' 
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            github.issues.createComment({
-              issue_number: ${{ github.event.number }},
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: "The following files are missing the license boilerplate:\n ${{ steps.boilerplate.outputs.files }}" 
-            })
+      # - name: 'Comment PR'
+      #   uses: actions/github-script@0.3.0
+      #   if: github.event_name == 'push' || github.event_name == 'pull_request' 
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     script: |
+      #       github.issues.createComment({
+      #         issue_number: ${{ github.event.number }},
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         body: "The following files are missing the license boilerplate:\n ${{ steps.boilerplate.outputs.files }}" 
+      #       })
