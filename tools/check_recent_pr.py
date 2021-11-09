@@ -27,8 +27,9 @@ IGNOREPRABOVEMINUTES = 5
 # GITHUB_REPOSITORY = 'GoogleCloudPlatform/rad-lab'
 # GITHUB_REPOSITORY = 'Mukul-Org/terraform_playground'
 
-def main(GITHUB_REPOSITORY, TOKEN):
-    print(TOKEN)
+def main(GITHUB_REPOSITORY):
+    # print(TOKEN)
+    TOKEN = os.getenv('GITHUB_TOKEN', '...')
     open_pr(GITHUB_REPOSITORY, TOKEN)
 
 def open_pr(GITHUB_REPOSITORY, TOKEN):
@@ -72,11 +73,11 @@ def lisencecheck(GITHUB_REPOSITORY):
     return files
 
 def commentpr(GITHUB_REPOSITORY, pr, comment, TOKEN):
-    headers = {'Authorization': 'token ' + TOKEN}
+    headers = {'Authorization': f'token {TOKEN}'}
     response  = requests.post('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/issues/'+ str(pr) +'/comments', data = comment, headers=headers)
     print(response.text)
 
 if __name__ == '__main__':
-    if len(sys.argv) != 3:
-      raise SystemExit('No repository or No token passed.')
-    main(sys.argv[1],sys.argv[2])
+    if len(sys.argv) != 2:
+      raise SystemExit('No repository passed.')
+    main(sys.argv[1])

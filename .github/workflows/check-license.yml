@@ -64,7 +64,7 @@ jobs:
         id: boilerplate
         run: |
           echo $GITHUB_REPOSITORY
-          python check_recent_pr.py ${GITHUB_REPOSITORY} ${{ secrets.WORKFLOW_PAT }}
+          python check_recent_pr.py ${GITHUB_REPOSITORY}
         working-directory: tools
         # continue-on-error: true
 
