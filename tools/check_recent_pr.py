@@ -48,14 +48,19 @@ def open_pr(GITHUB_REPOSITORY, TOKEN, GITHUB_WORKSPACE):
                 for x in range(len(files)):
                     # print (files[x])
                     comment = comment + '\n' + files[x].replace(GITHUB_WORKSPACE, ".")
+                    status = 'fail'
             else:
                 # print("list is empty")
                 comment = 'Apache 2.0 Lisence check successful!'
+                status = 'pass'
         else:
             print('PR # ' + str(pr['number']) + ' : Skip Licence check...')
 
         # comment PR
         commentpr(GITHUB_REPOSITORY, pr['number'], comment, TOKEN)
+
+        if(status == 'fail'):
+            raise ValueError('Apache 2.0 Lisence check failed!')
 
 def checkmindiff(pr_created_at):
     now = datetime.datetime.now().astimezone(timezone('America/Los_Angeles'))

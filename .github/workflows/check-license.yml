@@ -17,23 +17,8 @@
 name: 'BUILD - Check Lisence Boilerplate'
 
 on:
-  # schedule:
-  #   - cron:  '*/5 * * * *' 
-  # push:
-  #   branches:
-  #     - main
-  # pull_request:
-  #   branches:
-  #     - main
-  #   types: [opened]
-  #   paths:
-  #     - '**.js'
-  #     - '**Dockerfile'
-  #     - '**.py'
-  #     - '**.sh'
-  #     - '**.tf'
-  #     - '**.yaml'
-  #     - '**.yml'
+  schedule:
+    - cron:  '*/5 * * * *' 
   workflow_dispatch:
 
 jobs:
@@ -63,30 +48,6 @@ jobs:
       - name: execute py script # run the check_recent_pr.py
         id: boilerplate
         run: |
-          echo $GITHUB_REPOSITORY
-          echo $GITHUB_WORKSPACE
           python check_recent_pr.py
         working-directory: tools
         # continue-on-error: true
-
-      # - name: print output
-      #   run: |
-      #     enter=$'\n'
-      #     echo "The following files are missing the license boilerplate:$enter${{ steps.boilerplate.outputs.files }}"
-
-      # - name: test comment
-      #   run: | 
-      #     curl -v -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/user
-
-      # - name: 'Comment PR'
-      #   uses: actions/github-script@0.3.0
-      #   if: github.event_name == 'push' || github.event_name == 'pull_request' 
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     script: |
-      #       github.issues.createComment({
-      #         issue_number: ${{ github.event.number }},
-      #         owner: context.repo.owner,
-      #         repo: context.repo.repo,
-      #         body: "The following files are missing the license boilerplate:\n ${{ steps.boilerplate.outputs.files }}" 
-      #       })
