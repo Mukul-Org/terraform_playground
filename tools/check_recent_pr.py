@@ -23,30 +23,39 @@ from pprint import pprint
 import dateutil.parser
 from pytz import timezone
 
-IGNOREPRABOVEMINUTES = 5
+IGNOREPRABOVEMINUTES = 7000
 # GITHUB_REPOSITORY = 'GoogleCloudPlatform/rad-lab'
 # GITHUB_REPOSITORY = 'Mukul-Org/terraform_playground'
 
-def main(GITHUB_REPOSITORY):
-    # print(TOKEN)
-    TOKEN = os.getenv('GITHUB_TOKEN', '...')
-    open_pr(GITHUB_REPOSITORY, TOKEN)
+def main():
+    # TOKEN = os.getenv('GITHUB_TOKEN', '...')
 
-def open_pr(GITHUB_REPOSITORY, TOKEN):
+    TOKEN             = os.getenv('GITHUB_TOKEN')
+    GITHUB_WORKSPACE  = os.getenv('GITHUB_WORKSPACE')
+    GITHUB_REPOSITORY = os.getenv('GITHUB_REPOSITORY')
+
+    open_pr(GITHUB_REPOSITORY, TOKEN, GITHUB_WORKSPACE)
+
+def open_pr(GITHUB_REPOSITORY, TOKEN, GITHUB_WORKSPACE):
+    
     response = requests.get('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/pulls')
+
     for pr in response.json():
         if(checkmindiff(pr['created_at'])):
             print('PR # ' + str(pr['number']) + ' : Run Licence check...')
-            lisencecheck(GITHUB_REPOSITORY)
-        else:
-            print('PR # ' + str(pr['number']) + ' : Skip Licence check...')
-            # if lisencecheck(os.path.dirname(os.getcwd())):
-            if lisencecheck(GITHUB_REPOSITORY):
+            files = lisencecheck(GITHUB_WORKSPACE)
+            # print(files)
+            if files:
                 print("list is not empty")
                 comment = 'Apache 2.0 Lisence check failed!'
+                # for x in range(len(files)):
+                    # print (files[x])
+                    # comment = comment + '\n' + files[x]
             else:
                 print("list is empty")
                 comment = 'Apache 2.0 Lisence check successful!'
+        else:
+            print('PR # ' + str(pr['number']) + ' : Skip Licence check...')
 
         # comment PR
         commentpr(GITHUB_REPOSITORY, pr['number'], comment, TOKEN)
@@ -59,25 +68,23 @@ def checkmindiff(pr_created_at):
     # print(d1)
     # print(now - d1)
     minutes = (now - d1).total_seconds() / 60
-    # print(minutes)
+    print(minutes)
     if(minutes <= IGNOREPRABOVEMINUTES):
         return True
     else:
         return False
 
-def lisencecheck(GITHUB_REPOSITORY):
-    # files = os.system("python3 check_boilerplate.py "+GITHUB_REPOSITORY)
-    files = check_boilerplate.main(GITHUB_REPOSITORY)
-    # for x in range(len(files)):
-    #     print (files[x])
+def lisencecheck(GITHUB_WORKSPACE):
+    files = check_boilerplate.main(GITHUB_WORKSPACE)
+    print(files)
     return files
 
 def commentpr(GITHUB_REPOSITORY, pr, comment, TOKEN):
     headers = {'Authorization': f'token {TOKEN}'}
-    response  = requests.post('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/issues/'+ str(pr) +'/comments', data = comment, headers=headers)
+    print(comment)
+    data = {"body" : comment}
+    response  = requests.post('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/issues/'+ str(pr) +'/comments', data=data, headers=headers)
     print(response.text)
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-      raise SystemExit('No repository passed.')
-    main(sys.argv[1])
+    main()
