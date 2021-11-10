@@ -115,5 +115,4 @@ def commentpr(GITHUB_REPOSITORY, pr, comment, TOKEN):
 
 
 if __name__ == '__main__':
-    # main()
-    prcommentcheck('Mukul-Org/terraform_playground', 54)
+    main()
