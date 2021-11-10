@@ -52,16 +52,16 @@ def main():
                 for x in range(len(pr_no_lisence_files)):
                     # print (files[x])
                     comment = comment + '\n' + pr_no_lisence_files[x]
-                    status = 'fail'
+                    # status = 'fail'
             else:
                 comment = '<!-- Boilerplate Check -->\nApache 2.0 Lisence check successful!'
-                status = 'pass'
+                # status = 'pass'
 
             # comment PR
             commentpr(GITHUB_REPOSITORY, pr['number'], comment, TOKEN)
 
-            if(status == 'fail'):
-                raise ValueError('Apache 2.0 Lisence check failed!')
+            # if(status == 'fail'):
+            #     raise ValueError('Apache 2.0 Lisence check failed!')
 
         else:
             print('PR # ' + str(pr['number']) + ' : Skip Licence check...')
