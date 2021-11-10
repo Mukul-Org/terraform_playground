@@ -116,8 +116,11 @@ def pr_files(GITHUB_REPOSITORY,pr):
     try:
         response = requests.get('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/pulls/'+ str(pr) +'/files')
         for file in response.json():
-            pr_files.append(file['filename'])
-        # print(pr_files)
+            if(file['status'] != 'removed'):
+                pr_files.append(file['filename'])
+            else:
+                continue
+        print(pr_files)
         return pr_files
     except requests.exceptions.RequestException as e: 
         raise SystemExit(e)    
@@ -134,4 +137,5 @@ def commentpr(GITHUB_REPOSITORY, pr, comment, TOKEN):
 
 
 if __name__ == '__main__':
-    main()
+    # main()
+    pr_files('Mukul-Org/terraform_playground',55)
