@@ -57,7 +57,7 @@ jobs:
         id: boilerplate-manual
         if: github.event_name == 'workflow_dispatch'
         run: |
-          if [[ "${{ github.event.inputs.PRNumber }}" =~ ^[0-9]+$ ]] || [[ "{{ github.event.inputs.PRNumber }}" == "All" ]]
+          if [[ "${{ github.event.inputs.PRNumber }}" =~ ^[0-9]+$ ]] || [[ "${{ github.event.inputs.PRNumber }}" == "All" ]]
           then
             python check_recent_pr.py ${{ github.event.inputs.PRNumber }}
           else
