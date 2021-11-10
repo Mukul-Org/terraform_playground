@@ -23,7 +23,7 @@ from pprint import pprint
 import dateutil.parser
 from pytz import timezone
 
-IGNOREPRABOVEMINUTES = 5
+# IGNOREPRABOVEMINUTES = 5
 
 def main():
 
@@ -34,18 +34,22 @@ def main():
     response = open_pr(GITHUB_REPOSITORY)
 
     for pr in response.json():
-        if(checkmindiff(pr['created_at'])):
+        
+        commentcheck = prcommentcheck(GITHUB_REPOSITORY, pr['number'])
+
+        if(commentcheck == 'false'):
+        # if(checkmindiff(pr['created_at']) and commentcheck == 'false'):
             print('PR # ' + str(pr['number']) + ' : Run Licence check...')
             files = lisencecheck(GITHUB_WORKSPACE)
             # print(files)
             if files:
-                comment = 'Apache 2.0 Lisence check failed!\n\nThe following files are missing the license boilerplate:\n'
+                comment = '<!-- Boilerplate Check -->\nApache 2.0 Lisence check failed!\n\nThe following files are missing the license boilerplate:\n'
                 for x in range(len(files)):
                     # print (files[x])
                     comment = comment + '\n' + files[x].replace(GITHUB_WORKSPACE, ".")
                     status = 'fail'
             else:
-                comment = 'Apache 2.0 Lisence check successful!'
+                comment = '<!-- Boilerplate Check -->\nApache 2.0 Lisence check successful!'
                 status = 'pass'
 
             # comment PR
@@ -64,19 +68,34 @@ def open_pr(GITHUB_REPOSITORY):
     except requests.exceptions.RequestException as e: 
         raise SystemExit(e)
 
-def checkmindiff(pr_created_at):
-    now = datetime.datetime.now().astimezone(timezone('America/Los_Angeles'))
-    now = now.replace(microsecond=0)
-    # print(now)
-    d1 = dateutil.parser.parse(pr_created_at).astimezone(timezone('America/Los_Angeles'))
-    # print(d1)
-    # print(now - d1)
-    minutes = (now - d1).total_seconds() / 60
-    # print(minutes)
-    if(minutes <= IGNOREPRABOVEMINUTES):
-        return True
-    else:
-        return False
+# def checkmindiff(pr_created_at):
+#     now = datetime.datetime.now().astimezone(timezone('America/Los_Angeles'))
+#     now = now.replace(microsecond=0)
+#     # print(now)
+#     d1 = dateutil.parser.parse(pr_created_at).astimezone(timezone('America/Los_Angeles'))
+#     # print(d1)
+#     # print(now - d1)
+#     minutes = (now - d1).total_seconds() / 60
+#     # print(minutes)
+#     if(minutes <= IGNOREPRABOVEMINUTES):
+#         return True
+#     else:
+#         return False
+
+def prcommentcheck(GITHUB_REPOSITORY, pr):
+    try:
+        status = 'false'
+        response = requests.get('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/issues/'+ str(pr) +'/comments')
+        for comment in response.json():
+            body = comment['body']
+            if(body.startswith('<!-- Boilerplate Check -->')):
+                # print(body)
+                status = 'true'
+                break
+        return status
+    except requests.exceptions.RequestException as e: 
+        raise SystemExit(e)
+
 
 def lisencecheck(GITHUB_WORKSPACE):
     files = check_boilerplate.main(GITHUB_WORKSPACE)
@@ -96,4 +115,5 @@ def commentpr(GITHUB_REPOSITORY, pr, comment, TOKEN):
 
 
 if __name__ == '__main__':
-    main()
+    # main()
+    prcommentcheck('Mukul-Org/terraform_playground', 54)
