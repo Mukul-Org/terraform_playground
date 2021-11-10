@@ -40,13 +40,18 @@ def main():
         if(commentcheck == 'false'):
         # if(checkmindiff(pr['created_at']) and commentcheck == 'false'):
             print('PR # ' + str(pr['number']) + ' : Run Licence check...')
-            files = lisencecheck(GITHUB_WORKSPACE)
+            
+            # allfiles = lisencecheck(GITHUB_WORKSPACE)
+            prfiles = pr_files(GITHUB_REPOSITORY,pr['number'])
+            all_no_lisence_files = lisencecheck(GITHUB_WORKSPACE)
+            pr_no_lisence_files = set.intersection(set(prfiles), set(all_no_lisence_files))
+
             # print(files)
-            if files:
+            if pr_no_lisence_files:
                 comment = '<!-- Boilerplate Check -->\nApache 2.0 Lisence check failed!\n\nThe following files are missing the license boilerplate:\n'
-                for x in range(len(files)):
+                for x in range(len(pr_no_lisence_files)):
                     # print (files[x])
-                    comment = comment + '\n' + files[x].replace(GITHUB_WORKSPACE, ".")
+                    comment = comment + '\n' + pr_no_lisence_files[x]
                     status = 'fail'
             else:
                 comment = '<!-- Boilerplate Check -->\nApache 2.0 Lisence check successful!'
@@ -98,9 +103,24 @@ def prcommentcheck(GITHUB_REPOSITORY, pr):
 
 
 def lisencecheck(GITHUB_WORKSPACE):
-    files = check_boilerplate.main(GITHUB_WORKSPACE)
+    all_no_lisence_files = []
+    allfiles = check_boilerplate.main(GITHUB_WORKSPACE)
     # print(files)
-    return files
+    for x in range(len(allfiles)):
+        all_no_lisence_files.append(allfiles[x].replace(GITHUB_WORKSPACE+'/', ""))
+    print(all_no_lisence_files)
+    return all_no_lisence_files
+
+def pr_files(GITHUB_REPOSITORY,pr):
+    pr_files = []
+    try:
+        response = requests.get('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/pulls/'+ str(pr) +'/files')
+        for file in response.json():
+            pr_files.append(file['filename'])
+        # print(pr_files)
+        return pr_files
+    except requests.exceptions.RequestException as e: 
+        raise SystemExit(e)    
 
 def commentpr(GITHUB_REPOSITORY, pr, comment, TOKEN):
     headers = {'Authorization': f'token {TOKEN}', 'Accept': 'application/vnd.github.v3+json'}
@@ -111,7 +131,6 @@ def commentpr(GITHUB_REPOSITORY, pr, comment, TOKEN):
         # print(response.text)
     except requests.exceptions.RequestException as e: 
         raise SystemExit(e)
-
 
 
 if __name__ == '__main__':
