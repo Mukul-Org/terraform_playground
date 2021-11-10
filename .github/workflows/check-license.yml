@@ -17,8 +17,8 @@
 name: 'BUILD - Check License Boilerplate'
 
 on:
-  schedule:
-    - cron:  '*/30 * * * *' 
+#   schedule:
+#     - cron:  '*/30 * * * *' 
   workflow_dispatch:
     inputs:
           PRNumber:
