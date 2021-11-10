@@ -31,8 +31,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          token: ${{ secrets.WORKFLOW_PAT }}
 
       - name: setup python
         uses: actions/setup-python@v2
@@ -50,4 +48,3 @@ jobs:
         run: |
           python check_recent_pr.py
         working-directory: tools
-        # continue-on-error: true
