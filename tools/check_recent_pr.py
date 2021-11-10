@@ -23,7 +23,7 @@ from pprint import pprint
 import dateutil.parser
 from pytz import timezone
 
-IGNOREPRABOVEMINUTES = 5
+IGNOREPRABOVEMINUTES = 700
 
 def main():
 
@@ -72,7 +72,7 @@ def checkmindiff(pr_created_at):
     # print(d1)
     # print(now - d1)
     minutes = (now - d1).total_seconds() / 60
-    print(minutes)
+    # print(minutes)
     if(minutes <= IGNOREPRABOVEMINUTES):
         return True
     else:
