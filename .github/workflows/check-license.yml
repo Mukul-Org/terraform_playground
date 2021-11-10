@@ -18,7 +18,7 @@ name: 'BUILD - Check Lisence Boilerplate'
 
 on:
   schedule:
-    - cron:  '*/5 * * * *' 
+    - cron:  '*/30 * * * *' 
   workflow_dispatch:
 
 jobs:
