@@ -108,7 +108,7 @@ def lisencecheck(GITHUB_WORKSPACE):
     # print(files)
     for x in range(len(allfiles)):
         all_no_lisence_files.append(allfiles[x].replace(GITHUB_WORKSPACE+'/', ""))
-    print(all_no_lisence_files)
+    # print(all_no_lisence_files)
     return all_no_lisence_files
 
 def pr_files(GITHUB_REPOSITORY,pr):

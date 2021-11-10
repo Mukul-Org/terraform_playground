@@ -54,8 +54,8 @@ def main(dir):
     print('\n'.join(' - {}'.format(s) for s in warnings))
   if errors:
     # print(errors)
-    print('The following files are missing the license boilerplate:')
-    print('\n'.join(' - {}'.format(s) for s in errors))
+    # print('The following files are missing the license boilerplate:')
+    # print('\n'.join(' - {}'.format(s) for s in errors))
     return errors
 
 
