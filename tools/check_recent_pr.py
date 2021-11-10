@@ -15,6 +15,7 @@
 # limitations under the License.
 
 import os
+import sys
 import json
 import requests
 # import datetime
@@ -25,23 +26,26 @@ from pytz import timezone
 
 # IGNOREPRABOVEMINUTES = 5
 
-def main():
+def main(PR):
 
     TOKEN             = os.getenv('GITHUB_TOKEN')
     GITHUB_WORKSPACE  = os.getenv('GITHUB_WORKSPACE')
     GITHUB_REPOSITORY = os.getenv('GITHUB_REPOSITORY')
 
-    response = open_pr(GITHUB_REPOSITORY)
-
+    if PR == 'All':
+        response = open_pr(GITHUB_REPOSITORY)
+    else: 
+        print('Run check for: ' + PR)
+        
     for pr in response.json():
         
         commentcheck = prcommentcheck(GITHUB_REPOSITORY, pr['number'])
 
+        # If commentcheck = 'false' i.e. Lisence check has not run on the PR before.
         if(commentcheck == 'false'):
         # if(checkmindiff(pr['created_at']) and commentcheck == 'false'):
             print('PR # ' + str(pr['number']) + ' : Run Licence check...')
             
-            # allfiles = lisencecheck(GITHUB_WORKSPACE)
             prfiles = pr_files(GITHUB_REPOSITORY,pr['number'])
             all_no_lisence_files = lisencecheck(GITHUB_WORKSPACE)
             pr_no_lisence_files = list(set.intersection(set(prfiles), set(all_no_lisence_files)))
@@ -139,4 +143,8 @@ def commentpr(GITHUB_REPOSITORY, pr, comment, TOKEN):
 
 
 if __name__ == '__main__':
-    main()
+
+    if len(sys.argv) == 2:
+        main(sys.argv[1])
+    else:
+        main('All')
