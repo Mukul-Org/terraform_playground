@@ -67,6 +67,7 @@ def main():
             print('PR # ' + str(pr['number']) + ' : Skip Licence check...')
 
 def open_pr(GITHUB_REPOSITORY):
+    print('Fetching open PRs...')
     try:
         response = requests.get('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/pulls')
         return response
@@ -88,6 +89,7 @@ def open_pr(GITHUB_REPOSITORY):
 #         return False
 
 def prcommentcheck(GITHUB_REPOSITORY, pr):
+    print('Checking if the Lisence check has already ran...')
     try:
         status = 'false'
         response = requests.get('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/issues/'+ str(pr) +'/comments')
@@ -137,5 +139,4 @@ def commentpr(GITHUB_REPOSITORY, pr, comment, TOKEN):
 
 
 if __name__ == '__main__':
-    # main()
-    pr_files('Mukul-Org/terraform_playground',55)
+    main()
