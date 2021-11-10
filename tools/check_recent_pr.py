@@ -23,7 +23,7 @@ from pprint import pprint
 import dateutil.parser
 from pytz import timezone
 
-IGNOREPRABOVEMINUTES = 7000
+IGNOREPRABOVEMINUTES = 5
 
 def main():
 
