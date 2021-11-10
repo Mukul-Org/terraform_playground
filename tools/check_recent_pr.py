@@ -44,7 +44,7 @@ def main():
             # allfiles = lisencecheck(GITHUB_WORKSPACE)
             prfiles = pr_files(GITHUB_REPOSITORY,pr['number'])
             all_no_lisence_files = lisencecheck(GITHUB_WORKSPACE)
-            pr_no_lisence_files = set.intersection(set(prfiles), set(all_no_lisence_files))
+            pr_no_lisence_files = list(set.intersection(set(prfiles), set(all_no_lisence_files)))
 
             # print(files)
             if pr_no_lisence_files:
