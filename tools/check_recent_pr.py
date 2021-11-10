@@ -39,7 +39,7 @@ def main(PR):
         # Looping through all Open PRs
         for pr in response.json():
             
-            commentcheck = prcommentcheck(GITHUB_REPOSITORY, pr)
+            commentcheck = prcommentcheck(GITHUB_REPOSITORY, pr['number'])
 
             lisencecheck(GITHUB_REPOSITORY,GITHUB_WORKSPACE, TOKEN, pr['number'],commentcheck)        
 
