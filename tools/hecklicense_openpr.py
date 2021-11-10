@@ -41,11 +41,11 @@ def main(PR):
             
             commentcheck = prcommentcheck(GITHUB_REPOSITORY, pr['number'])
 
-            lisencecheck(GITHUB_REPOSITORY,GITHUB_WORKSPACE, TOKEN, pr['number'],commentcheck)        
+            licensecheck(GITHUB_REPOSITORY,GITHUB_WORKSPACE, TOKEN, pr['number'],commentcheck)        
 
     else: 
-        print('Manual Lisence check for: ' + PR)
-        lisencecheck(GITHUB_REPOSITORY,GITHUB_WORKSPACE, TOKEN, int(PR),'false') 
+        print('Manual License check for: ' + PR)
+        licensecheck(GITHUB_REPOSITORY,GITHUB_WORKSPACE, TOKEN, int(PR),'false') 
 
 
 def open_pr(GITHUB_REPOSITORY):
@@ -57,25 +57,25 @@ def open_pr(GITHUB_REPOSITORY):
         raise SystemExit(e)
 
 
-def lisencecheck(GITHUB_REPOSITORY,GITHUB_WORKSPACE, TOKEN, pr, commentcheck):   
+def licensecheck(GITHUB_REPOSITORY,GITHUB_WORKSPACE, TOKEN, pr, commentcheck):   
 
-    # If commentcheck = 'false' i.e. Lisence check has not run on the PR before.
+    # If commentcheck = 'false' i.e. License check has not run on the PR before.
     if(commentcheck == 'false'):
     # if(checkmindiff(pr['created_at']) and commentcheck == 'false'):
         print('PR # ' + str(pr) + ' : Run Licence check...')
         
         prfiles = pr_files(GITHUB_REPOSITORY,pr)
-        all_no_lisence_files = boilerplate(GITHUB_WORKSPACE)
-        pr_no_lisence_files = list(set.intersection(set(prfiles), set(all_no_lisence_files)))
+        all_no_license_files = boilerplate(GITHUB_WORKSPACE)
+        pr_no_license_files = list(set.intersection(set(prfiles), set(all_no_license_files)))
 
         # print(files)
-        if pr_no_lisence_files:
-            comment = '<!-- Boilerplate Check -->\nApache 2.0 Lisence check failed!\n\nThe following files are missing the license boilerplate:\n'
-            for x in range(len(pr_no_lisence_files)):
+        if pr_no_license_files:
+            comment = '<!-- Boilerplate Check -->\nApache 2.0 License check failed!\n\nThe following files are missing the license boilerplate:\n'
+            for x in range(len(pr_no_license_files)):
                 # print (files[x])
-                comment = comment + '\n' + pr_no_lisence_files[x]
+                comment = comment + '\n' + pr_no_license_files[x]
         else:
-            comment = '<!-- Boilerplate Check -->\nApache 2.0 Lisence check successful!'
+            comment = '<!-- Boilerplate Check -->\nApache 2.0 License check successful!'
 
         # comment PR
         commentpr(GITHUB_REPOSITORY, pr, comment, TOKEN)
@@ -98,7 +98,7 @@ def lisencecheck(GITHUB_REPOSITORY,GITHUB_WORKSPACE, TOKEN, pr, commentcheck):
 #         return False
 
 def prcommentcheck(GITHUB_REPOSITORY, pr):
-    print('Checking if the Lisence check has already ran...')
+    print('Checking if the License check has already ran...')
     try:
         status = 'false'
         response = requests.get('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/issues/'+ str(pr) +'/comments')
@@ -114,13 +114,13 @@ def prcommentcheck(GITHUB_REPOSITORY, pr):
 
 
 def boilerplate(GITHUB_WORKSPACE):
-    all_no_lisence_files = []
+    all_no_license_files = []
     allfiles = check_boilerplate.main(GITHUB_WORKSPACE)
     # print(files)
     for x in range(len(allfiles)):
-        all_no_lisence_files.append(allfiles[x].replace(GITHUB_WORKSPACE+'/', ""))
-    # print(all_no_lisence_files)
-    return all_no_lisence_files
+        all_no_license_files.append(allfiles[x].replace(GITHUB_WORKSPACE+'/', ""))
+    # print(all_no_license_files)
+    return all_no_license_files
 
 def pr_files(GITHUB_REPOSITORY,pr):
     pr_files = []
