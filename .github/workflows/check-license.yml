@@ -57,7 +57,7 @@ jobs:
         id: boilerplate-manual
         if: github.event_name == 'workflow_dispatch'
         run: |
-          if ! [[ "${{ github.event.inputs.PRNumber }}" =~ ^[0-9]+$ ]] && [ "{{ github.event.inputs.PRNumber }}" != "All" ]
+          if ! [[ "${{ github.event.inputs.PRNumber }}" =~ ^[0-9]+$ ]] || [ "{{ github.event.inputs.PRNumber }}" != "All" ]
           then
             echo "INVALID PR Number ENTERED..."
             exit 1
