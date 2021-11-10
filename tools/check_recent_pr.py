@@ -120,7 +120,7 @@ def pr_files(GITHUB_REPOSITORY,pr):
                 pr_files.append(file['filename'])
             else:
                 continue
-        print(pr_files)
+        # print(pr_files)
         return pr_files
     except requests.exceptions.RequestException as e: 
         raise SystemExit(e)    
