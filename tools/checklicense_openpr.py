@@ -20,8 +20,6 @@ import json
 import shutil
 import requests
 import check_boilerplate
-from pprint import pprint
-from pytz import timezone
 
 
 def main(PR):
