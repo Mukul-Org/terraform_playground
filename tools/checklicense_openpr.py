@@ -19,13 +19,10 @@ import sys
 import json
 import shutil
 import requests
-# import datetime
 import check_boilerplate
 from pprint import pprint
-# import dateutil.parser
 from pytz import timezone
 
-# IGNOREPRABOVEMINUTES = 5
 
 def main(PR):
 
@@ -91,19 +88,6 @@ def licensecheck(GITHUB_REPOSITORY,GITHUB_WORKSPACE, TOKEN, pr, commentcheck):
     else:
         print('PR # ' + str(pr) + ' : Skip Licence check...')
 
-# def checkmindiff(pr_created_at):
-#     now = datetime.datetime.now().astimezone(timezone('America/Los_Angeles'))
-#     now = now.replace(microsecond=0)
-#     # print(now)
-#     d1 = dateutil.parser.parse(pr_created_at).astimezone(timezone('America/Los_Angeles'))
-#     # print(d1)
-#     # print(now - d1)
-#     minutes = (now - d1).total_seconds() / 60
-#     # print(minutes)
-#     if(minutes <= IGNOREPRABOVEMINUTES):
-#         return True
-#     else:
-#         return False
 
 def prcommentcheck(GITHUB_REPOSITORY, pr):
     print('Checking if the License check has already ran...')
