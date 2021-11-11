@@ -41,7 +41,6 @@ def main(PR):
         for pr in response.json():
             
             commentcheck = prcommentcheck(GITHUB_REPOSITORY, pr['number'])
-
             licensecheck(GITHUB_REPOSITORY,GITHUB_WORKSPACE, TOKEN, pr['number'],commentcheck)        
 
     else: 
@@ -63,15 +62,17 @@ def licensecheck(GITHUB_REPOSITORY,GITHUB_WORKSPACE, TOKEN, pr, commentcheck):
     # If commentcheck = 'false' i.e. License check has not run on the PR before.
     if(commentcheck == 'false'):
     # if(checkmindiff(pr['created_at']) and commentcheck == 'false'):
+
         print('PR # ' + str(pr) + ' : Run Licence check...')
         
         # Get all pr files
         prfiles = pr_files(GITHUB_REPOSITORY,pr)
+
         # Download all prf files locally into ./tools/temp/ folder in the same directory structure
         downloadprfiles(prfiles)
+
         # Run lisence check on the downloaded files in temp directory
         pr_no_license_files = boilerplate(os.getcwd()+'/temp')
-        # pr_no_license_files = list(set.intersection(set(prfiles), set(all_no_license_files)))
 
         # Delete temp directory and its contents
         shutil.rmtree(os.getcwd()+'/temp')
@@ -145,24 +146,24 @@ def pr_files(GITHUB_REPOSITORY,pr):
 
 def downloadprfiles(prfiles):
     for file in prfiles:
-        print('Create Temp Directory')
+        # print('Create Temp Directory')
         path = os.path.dirname(file['filename'])
         path = os.getcwd() + '/temp/' + path
-        print(path)
+        # print(path)
 
         if not os.path.exists(path):
             os.makedirs(path)
 
-        print('Beginning file download with requests')
+        # print('Beginning file download with requests')
         r = requests.get(file['raw_url'])
 
         with open(path + '/' + os.path.basename(file['filename']), 'wb') as f:
             f.write(r.content)
 
         # Retrieve HTTP meta-data
-        print(r.status_code)
-        print(r.headers['content-type'])
-        print(r.encoding)
+        # print(r.status_code)
+        # print(r.headers['content-type'])
+        # print(r.encoding)
 
 
 def commentpr(GITHUB_REPOSITORY, pr, comment, TOKEN):
