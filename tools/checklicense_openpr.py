@@ -144,7 +144,7 @@ def downloadprfiles(prfiles):
         with open(path + '/' + os.path.basename(file['filename']), 'wb') as f:
             f.write(r.content)
 
-        # Retrieve HTTP meta-data
+        # # Retrieve HTTP meta-data
         # print(r.status_code)
         # print(r.headers['content-type'])
         # print(r.encoding)
