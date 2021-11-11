@@ -29,7 +29,8 @@ from pytz import timezone
 def main(PR):
 
     TOKEN             = os.getenv('GITHUB_TOKEN')
-    GITHUB_WORKSPACE  = os.getenv('GITHUB_WORKSPACE')
+    # GITHUB_WORKSPACE  = os.getenv('GITHUB_WORKSPACE')
+    GITHUB_WORKSPACE  = os.getenv('GITHUB_REF')
     GITHUB_REPOSITORY = os.getenv('GITHUB_REPOSITORY')
 
     if PR == 'All':
