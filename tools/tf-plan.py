@@ -33,6 +33,10 @@ def main(PR):
   print("Removed Files:")
   print(removed_files)
 
+  working_directories = get_working_directories(modified_files, removed_files)
+  print("Working Directories:")
+  print(working_directories)
+
 def pr_files(GITHUB_REPOSITORY,pr):
     modified_files = []
     removed_files = []
@@ -46,6 +50,22 @@ def pr_files(GITHUB_REPOSITORY,pr):
         return modified_files, removed_files
     except requests.exceptions.RequestException as e: 
         raise SystemExit(e)  
+
+
+def get_working_directories(modified_files, removed_files):
+  modified_files_dir = []
+  removed_files_dir = []
+
+  for file in modified_files:
+    modified_files_dir.append(os.path.dirname(file))
+
+  for file in removed_files:
+    removed_files_dir.append(os.path.dirname(file))
+
+  working_directories = modified_files_dir + removed_files_dir
+  working_directories = list(set(working_directories))
+
+  return working_directories
 
 if __name__ == '__main__':
 
