@@ -92,13 +92,13 @@ def tf(dir):
   return_code_plan, stdout_plan, stderr_plan = tr.plan_cmd(capture_output=False,var={'parent':'organizations/1234567890', 'billing_account':'ABCD-EFGH-IJKL-MNOP'})
   
   if(return_code_init == 1):
-    comment = 'Terraform Init FAILED!\nFor Working Directory: ' + dir.replace(os.getenv('GITHUB_WORKSPACE')+'/', '')
+    comment = 'Terraform Init FAILED!\nFor Module: ' + dir.replace(os.getenv('GITHUB_WORKSPACE')+'/', '')
     status = 'fail'
   if(return_code_plan == 1):
-    comment = 'Terraform Plan FAILED!\nFor Working Directory: ' + dir.replace(os.getenv('GITHUB_WORKSPACE')+'/', '')
+    comment = 'Terraform Plan FAILED!\nFor Module: ' + dir.replace(os.getenv('GITHUB_WORKSPACE')+'/', '')
     status = 'fail'
   else: 
-    comment = 'Terraform Init & Terraform Plan SUCCESSFUL!\nFor Working Directory: ' + dir.replace(os.getenv('GITHUB_WORKSPACE')+'/', '')
+    comment = 'Terraform Init & Terraform Plan SUCCESSFUL!\nFor Module: ' + dir.replace(os.getenv('GITHUB_WORKSPACE')+'/', '')
     status = 'pass'
   
   return comment, status
