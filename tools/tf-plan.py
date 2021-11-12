@@ -20,22 +20,30 @@ import glob
 import json
 import shutil
 import requests
+from python_terraform import Terraform
 
 def main(PR):
 
   TOKEN             = os.getenv('GITHUB_TOKEN')
+  GITHUB_WORKSPACE  = os.getenv('GITHUB_WORKSPACE')
   GITHUB_REPOSITORY = os.getenv('GITHUB_REPOSITORY')
 
+  # Get Added / Modified files in PR
   modified_files, removed_files = pr_files(GITHUB_REPOSITORY, PR)
 
-  print("Added/Modified Files:")
-  print(modified_files)
-  print("Removed Files:")
-  print(removed_files)
-
+  # Get Working directories to run TF Plan on
   working_directories = get_working_directories(modified_files, removed_files)
-  print("Working Directories:")
-  print(working_directories)
+
+  # Loop through all the identified working directories
+  try:
+    for dir in working_directories:
+      comment, status = tf(GITHUB_WORKSPACE + '/' + dir)
+      commentpr(GITHUB_REPOSITORY, PR, comment, TOKEN)
+      if(status == 'fail'):
+        sys.exit('Terraform Init or Terraform Plan FAILED for: '+ dir)
+  except requests.exceptions.RequestException as e: 
+    print('No working directory with TF configs in PR.')
+    raise SystemExit(e)
 
 def pr_files(GITHUB_REPOSITORY,pr):
     modified_files = []
@@ -47,6 +55,12 @@ def pr_files(GITHUB_REPOSITORY,pr):
               removed_files.append(file['filename'])
             else:
               modified_files.append(file['filename'])
+
+        print("Added/Modified Files:")
+        print(modified_files)
+        print("Removed Files:")
+        print(removed_files)
+
         return modified_files, removed_files
     except requests.exceptions.RequestException as e: 
         raise SystemExit(e)  
@@ -65,7 +79,40 @@ def get_working_directories(modified_files, removed_files):
   working_directories = modified_files_dir + removed_files_dir
   working_directories = list(set(working_directories))
 
+  print("Working Directories:")
+  print(working_directories)
+
   return working_directories
+
+
+def tf(dir):
+  tr = Terraform(working_dir=dir)
+
+  return_code_init, stdout_init, stderr_init = tr.init_cmd(capture_output=False)
+  return_code_plan, stdout_plan, stderr_plan = tr.plan_cmd(capture_output=False,auto_approve=True,var={'organization_id':'1234567890', 'billing_account_id':'ABCD-EFGH-IJKL-MNOP'})
+  
+  if(return_code_init == 1):
+    comment = 'Terraform Init FAILED!\nWorking Directory: ' + dir
+    status = 'fail'
+  if(return_code_plan == 1):
+    comment = 'Terraform Plan FAILED!\nWorking Directory: ' + dir
+    status = 'fail'
+  else: 
+    comment = 'Terraform Init & Terraform Plan SUCCESSFUL!\nWorking Directory: ' + dir
+    status = 'pass'
+  
+  return comment, status
+
+
+def commentpr(GITHUB_REPOSITORY, pr, comment, TOKEN):
+    headers = {'Authorization': f'token {TOKEN}', 'Accept': 'application/vnd.github.v3+json'}
+    # print(comment)
+    data = {"body":comment}
+    try:
+        response  = requests.post('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/issues/'+ str(pr) +'/comments', data=json.dumps(data), headers=headers)
+        # print(response.text)
+    except requests.exceptions.RequestException as e: 
+        raise SystemExit(e)
 
 if __name__ == '__main__':
 
