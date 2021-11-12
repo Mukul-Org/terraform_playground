@@ -40,9 +40,9 @@ def pr_files(GITHUB_REPOSITORY,pr):
         response = requests.get('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/pulls/'+ str(pr) +'/files')
         for file in response.json():
             if(file['status'] == 'removed'):
-              removed_files.append(file)
+              removed_files.append(file['filename'])
             else:
-              modified_files.append(file)
+              modified_files.append(file['filename'])
         return modified_files, removed_files
     except requests.exceptions.RequestException as e: 
         raise SystemExit(e)  
