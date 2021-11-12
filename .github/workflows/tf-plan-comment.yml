@@ -37,7 +37,7 @@ jobs:
           for added_modified_file in "${added_modified_files[@]}"; do
             echo "File Added/Modified : ${added_modified_file}" 
             if [[ "${added_modified_file}" == *".tf"* ]]; then
-              TFFILE = $added_modified_file
+              TFFILE=${added_modified_file}
             fi
           done
           DIR="$(dirname ${TFFILE})"
@@ -50,7 +50,7 @@ jobs:
           for removed_file in ${removed_files[@]}; do
             echo "File Removed : ${removed_file}" 
             if [[ "${removed_file}" == *".tf"* ]]; then
-              TFFILE = $removed_file
+              TFFILE=${removed_file}
             fi
           done
           DIR="$(dirname ${TFFILE})"
