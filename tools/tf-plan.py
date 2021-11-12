@@ -25,7 +25,7 @@ from python_terraform import Terraform
 def main(PR):
 
   TOKEN             = os.getenv('GITHUB_TOKEN')
-  GITHUB_WORKSPACE  = os.getenv('GITHUB_WORKSPACE')
+  TERRAFORM_CLI_PATH  = os.getenv('TERRAFORM_CLI_PATH')
   GITHUB_REPOSITORY = os.getenv('GITHUB_REPOSITORY')
 
   # Get Added / Modified files in PR
@@ -37,7 +37,7 @@ def main(PR):
   # Loop through all the identified working directories
   try:
     for dir in working_directories:
-      comment, status = tf(GITHUB_WORKSPACE + '/' + dir)
+      comment, status = tf(TERRAFORM_CLI_PATH + '/' + dir)
       commentpr(GITHUB_REPOSITORY, PR, comment, TOKEN)
       if(status == 'fail'):
         sys.exit('Terraform Init or Terraform Plan FAILED for: '+ dir)
@@ -92,13 +92,13 @@ def tf(dir):
   return_code_plan, stdout_plan, stderr_plan = tr.plan_cmd(capture_output=False,var={'parent':'organizations/1234567890', 'billing_account':'ABCD-EFGH-IJKL-MNOP'})
   
   if(return_code_init == 1):
-    comment = 'Terraform Init FAILED!\nFor Module: ' + dir.replace(os.getenv('GITHUB_WORKSPACE')+'/', '')
+    comment = 'Terraform Init FAILED!\nFor Module: ' + dir.replace(os.getenv('TERRAFORM_CLI_PATH')+'/', '')
     status = 'fail'
   if(return_code_plan == 1):
-    comment = 'Terraform Plan FAILED!\nFor Module: ' + dir.replace(os.getenv('GITHUB_WORKSPACE')+'/', '')
+    comment = 'Terraform Plan FAILED!\nFor Module: ' + dir.replace(os.getenv('TERRAFORM_CLI_PATH')+'/', '')
     status = 'fail'
   else: 
-    comment = 'Terraform Init & Terraform Plan SUCCESSFUL!\nFor Module: ' + dir.replace(os.getenv('GITHUB_WORKSPACE')+'/', '')
+    comment = 'Terraform Init & Terraform Plan SUCCESSFUL!\nFor Module: ' + dir.replace(os.getenv('TERRAFORM_CLI_PATH')+'/', '')
     status = 'pass'
   
   return comment, status
