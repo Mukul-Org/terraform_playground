@@ -68,6 +68,8 @@ def licensecheck(GITHUB_REPOSITORY, TOKEN, pr, commentcheck):
 
         print(os.getcwd()+'/temp')
         print(glob.glob(os.getcwd()+'/temp/*'))
+        print(glob.glob(os.getcwd()+'/temp/*/*'))
+        print(glob.glob(os.getcwd()+'/temp/*/*/*'))
 
         # Run lisence check on the downloaded files in temp directory
         pr_no_license_files = boilerplate(os.getcwd()+'/temp')
