@@ -38,6 +38,7 @@ jobs:
             echo "File Added/Modified : ${added_modified_file}" 
             if [[ "${added_modified_file}" == *".tf"* ]]; then
               TFFILE = "${added_modified_file}"
+            fi
           done
           DIR="$(dirname ${TFFILE})"
           echo "ENV_DIR=${DIR}" >> $GITHUB_ENV
@@ -50,6 +51,7 @@ jobs:
             echo "File Removed : ${removed_file}" 
             if [[ "${removed_file}" == *".tf"* ]]; then
               TFFILE = "${removed_file}"
+            fi
           done
           DIR="$(dirname ${TFFILE})"
           echo "ENV_DIR=${DIR}" >> $GITHUB_ENV
