@@ -27,6 +27,15 @@ def main(PR):
   TOKEN             = os.getenv('GITHUB_TOKEN')
   TERRAFORM_CLI_PATH  = os.getenv('TERRAFORM_CLI_PATH')
   GITHUB_REPOSITORY = os.getenv('GITHUB_REPOSITORY')
+  
+  print('****************************')
+  print(os.getcwd()+'/*')
+  print('****************************')
+  print(glob.glob(os.getcwd()+'/*/*'))
+  print('****************************')
+  print(glob.glob(os.getcwd()+'/*/*/*'))
+  print('****************************')
+  print(glob.glob(os.getcwd()+'/*/*/*/*'))
 
   # Get Added / Modified files in PR
   modified_files, removed_files = pr_files(GITHUB_REPOSITORY, PR)
