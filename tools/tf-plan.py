@@ -28,16 +28,14 @@ def main(PR):
   GITHUB_WORKSPACE  = os.getenv('GITHUB_WORKSPACE')
   GITHUB_REPOSITORY = os.getenv('GITHUB_REPOSITORY')
   
-  root = os.path.dirname(os.getcwd())
-  root = GITHUB_WORKSPACE
   # print('****************************')
-  # print(root+'/*')
+  # print(GITHUB_WORKSPACE+'/*')
   # print('****************************')
-  # print(glob.glob(root+'/*/*'))
+  # print(glob.glob(GITHUB_WORKSPACE+'/*/*'))
   # print('****************************')
-  # print(glob.glob(root+'/*/*/*'))
+  # print(glob.glob(GITHUB_WORKSPACE+'/*/*/*'))
   # print('****************************')
-  # print(glob.glob(root+'/*/*/*/*'))
+  # print(glob.glob(GITHUB_WORKSPACE+'/*/*/*/*'))
 
 
 
@@ -58,7 +56,7 @@ def main(PR):
       
       print("----------> RUN FOR: " + dir)
       # Copying main directory
-      shutil.copytree(root+'/'+dir, os.getcwd()+'/temp/'+dir)
+      shutil.copytree(GITHUB_WORKSPACE+'/'+dir, os.getcwd()+'/temp/'+dir)
 
       # Deleting added/modified & removed files
       for mfile in modified_files:
