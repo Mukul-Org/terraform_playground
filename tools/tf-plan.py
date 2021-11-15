@@ -16,95 +16,97 @@
 
 import os
 import sys
-import glob
 import json
+import glob
 import shutil
 import requests
 from python_terraform import Terraform
 
 def main(PR):
 
-  TOKEN             = os.getenv('GITHUB_TOKEN')
-  GITHUB_WORKSPACE  = os.getenv('GITHUB_WORKSPACE')
-  GITHUB_REPOSITORY = os.getenv('GITHUB_REPOSITORY')
-  
-  # print('****************************')
-  # print(GITHUB_WORKSPACE+'/*')
-  # print('****************************')
-  # print(glob.glob(GITHUB_WORKSPACE+'/*/*'))
-  # print('****************************')
-  # print(glob.glob(GITHUB_WORKSPACE+'/*/*/*'))
-  # print('****************************')
-  # print(glob.glob(GITHUB_WORKSPACE+'/*/*/*/*'))
+    TOKEN             = os.getenv('GITHUB_TOKEN')
+    GITHUB_WORKSPACE  = os.getenv('GITHUB_WORKSPACE')
+    GITHUB_REPOSITORY = os.getenv('GITHUB_REPOSITORY')
 
 
+    # Get Added / Modified files in PR
+    modified_files, modified_files_raw, removed_files = pr_files(GITHUB_REPOSITORY, PR)
 
-  # Get Added / Modified files in PR
-  modified_files, modified_files_raw, removed_files = pr_files(GITHUB_REPOSITORY, PR)
+    # Get Working directories to run TF Plan on
+    working_directories = get_updated_modules(modified_files, removed_files)
 
-  # # Get Working directories to run TF Plan on
-  working_directories = get_updated_modules(modified_files, removed_files)
-  # modified_files = ['examples/fabric_project/test2.tf', 'examples/fabric_project/variables.tf','modules/fabric-project/outputs.tf']
-  # removed_files = ['examples/fabric_project/test.tf']
-  # modified_files_raw = ['https://github.com/Mukul-Org/terraform_playground/blob/8b32601fd1dde900407558f070c900eb1f3e574a/examples/fabric_project/variables.tf']
-  # working_directories = ['examples/fabric_project','modules/fabric-project']
-
-  # Loop through all the identified working directories
-  # Deleting added/modified & removed files
-  try:
-    for dir in working_directories:
-      
-      print("----------> RUN FOR: " + dir)
-      # Copying main directory
-      shutil.copytree(GITHUB_WORKSPACE+'/'+dir, os.getcwd()+'/temp/'+dir)
-
-      # Deleting added/modified & removed files
-      for mfile in modified_files:
-        if os.path.exists(os.getcwd()+'/temp/'+mfile):
-          print("Deleting file: " + mfile)
-          os.remove(os.getcwd()+'/temp/'+mfile)
-
-      for rfile in removed_files:
-        if os.path.exists(os.getcwd()+'/temp/'+rfile):
-          print("Deleting file: " + rfile)
-          os.remove(os.getcwd()+'/temp/'+rfile)
-
-  except requests.exceptions.RequestException as e: 
-    print('No working directory with TF configs in PR.')
-    raise SystemExit(e)
-
-  # Loop through all the identified working directories
-  # Download added/modified files
-  try:
-    for dir in working_directories:
-      
-      # Download added/modified files
-      for file in modified_files:
-
-        if dir in file:
-          for raw in modified_files_raw:
-
-            if file in raw:
-              print("Downloading file: " + raw)
-              downloadprfiles(raw, file, os.getcwd()+'/temp/'+dir)
-              break
-
-  except requests.exceptions.RequestException as e: 
-    print('No working directory with TF configs in PR.')
-    raise SystemExit(e)
+    # Loop through all the identified working directories
+    # Deleting added/modified & removed files
+    try:
+        for dir in working_directories:
+            print("----------> RUN FOR: " + dir)
 
 
-  # Loop through all the identified working directories
-  # Run Terraform Plan
-  try:
-    for dir in working_directories:
-      comment, status = tf(os.getcwd() + '/temp/' + dir)
-      commentpr(GITHUB_REPOSITORY, PR, comment, TOKEN)
-      if(status == 'fail'):
-        sys.exit('Terraform Init or Terraform Plan FAILED for: '+ dir)
-  except requests.exceptions.RequestException as e: 
-    print('No working directory with TF configs in PR.')
-    raise SystemExit(e)
+            try:
+                # IF MODULE EXISTS: Copying main directory in temp folder
+                shutil.copytree(GITHUB_WORKSPACE+'/'+dir, os.getcwd()+'/temp/'+dir)
+
+                # Deleting added/modified & removed files
+                for mfile in modified_files:
+                    if os.path.exists(os.getcwd()+'/temp/'+mfile):
+                        print("Deleting file: " + mfile)
+                        os.remove(os.getcwd()+'/temp/'+mfile)
+
+                for rfile in removed_files:
+                    if os.path.exists(os.getcwd()+'/temp/'+rfile):
+                        print("Deleting file: " + rfile)
+                        os.remove(os.getcwd()+'/temp/'+rfile)
+            except:
+                # IF MODULE DONOT EXISTS: Creating temp module folder
+                os.makedirs(os.getcwd()+'/temp/'+dir)
+
+    except requests.exceptions.RequestException as e: 
+        print('No working directory with TF configs in PR.')
+        raise SystemExit(e)
+
+    # Loop through all the identified working directories
+    # Download added/modified files
+    try:
+        for dir in working_directories:
+
+            # Download added/modified files
+            for file in modified_files:
+        
+                if dir in file:
+                    for raw in modified_files_raw:
+
+                        if file in raw:
+                            print("Downloading file: " + raw)
+                            downloadprfiles(raw, file, os.getcwd()+'/temp/'+os.path.dirname(file))
+                            break
+
+    except requests.exceptions.RequestException as e: 
+        print('No working directory with TF configs in PR.')
+        raise SystemExit(e)
+
+
+    # Loop through all the identified working directories
+    # Run Terraform Plan
+    try:
+        for dir in working_directories:
+
+            # print('****************************')
+            # print(glob.glob(os.getcwd() + '/temp/' + dir+'/*'))
+            # print('****************************')
+            # print(glob.glob(os.getcwd() + '/temp/' + dir+'/*/*'))
+
+            # Running Terraform Init & Terraform Plan
+            comment, status = tf(os.getcwd() + '/temp/' + dir)
+            comment = comment + ' for: **' + dir + '** !'
+
+            # Commenting on the PR
+            commentpr(GITHUB_REPOSITORY, PR, comment, TOKEN)
+            if(status == 'fail'):
+                sys.exit('Terraform Init or Terraform Plan FAILED for: '+ dir)
+
+    except requests.exceptions.RequestException as e: 
+        print('No working directory with TF configs in PR.')
+        raise SystemExit(e)
 
 def pr_files(GITHUB_REPOSITORY,pr):
     removed_files = []
@@ -156,26 +158,32 @@ def get_updated_modules(modified_files, removed_files):
   working_directories = modified_files_dir + removed_files_dir
   working_directories = list(set(working_directories))
 
-  print("Working Directories:")
-  print(working_directories)
+#   print("Working Directories:")
+#   print(working_directories)
+  
+  modules = [x for x in working_directories if x.startswith('modules/')]
+  modules = [x for x in modules if x.count('/') == 1]
+  print("Modules Updated:")
+  print(modules)
 
-  return working_directories
+  return modules
 
 
 def tf(dir):
   tr = Terraform(working_dir=dir)
 
   return_code_init, stdout_init, stderr_init = tr.init_cmd(capture_output=False)
-  return_code_plan, stdout_plan, stderr_plan = tr.plan_cmd(capture_output=False,var={'parent':'organizations/1234567890', 'billing_account':'ABCD-EFGH-IJKL-MNOP'})
+  return_code_plan, stdout_plan, stderr_plan = tr.plan_cmd(capture_output=False,var={'billing_account':'ABCD-EFGH-IJKL-MNOP', 'organization_id':'1234567890', 'random_id': '1234'})
   
+  path = os.getcwd()+'/temp/'
   if(return_code_init == 1):
-    comment = 'Terraform Init FAILED!\nFor Module: ' + dir.replace(os.getenv('TERRAFORM_CLI_PATH')+'/', '')
+    comment = 'Terraform Init FAILED'
     status = 'fail'
   if(return_code_plan == 1):
-    comment = 'Terraform Plan FAILED!\nFor Module: ' + dir.replace(os.getenv('TERRAFORM_CLI_PATH')+'/', '')
+    comment = 'Terraform Plan FAILED'
     status = 'fail'
   else: 
-    comment = 'Terraform Init & Terraform Plan SUCCESSFUL!\nFor Module: ' + dir.replace(os.getenv('TERRAFORM_CLI_PATH')+'/', '')
+    comment = 'Terraform Init & Terraform Plan SUCCESSFUL'
     status = 'pass'
   
   return comment, status
