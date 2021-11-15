@@ -25,29 +25,82 @@ from python_terraform import Terraform
 def main(PR):
 
   TOKEN             = os.getenv('GITHUB_TOKEN')
-  TERRAFORM_CLI_PATH  = os.getenv('TERRAFORM_CLI_PATH')
+  GITHUB_WORKSPACE  = os.getenv('GITHUB_WORKSPACE')
   GITHUB_REPOSITORY = os.getenv('GITHUB_REPOSITORY')
   
   root = os.path.dirname(os.getcwd())
-  print('****************************')
-  print(root+'/*')
-  print('****************************')
-  print(glob.glob(root+'/*/*'))
-  print('****************************')
-  print(glob.glob(root+'/*/*/*'))
-  print('****************************')
-  print(glob.glob(root+'/*/*/*/*'))
+  root = GITHUB_WORKSPACE
+  # print('****************************')
+  # print(root+'/*')
+  # print('****************************')
+  # print(glob.glob(root+'/*/*'))
+  # print('****************************')
+  # print(glob.glob(root+'/*/*/*'))
+  # print('****************************')
+  # print(glob.glob(root+'/*/*/*/*'))
+
+
 
   # Get Added / Modified files in PR
-  modified_files, removed_files = pr_files(GITHUB_REPOSITORY, PR)
+  modified_files, modified_files_raw, removed_files = pr_files(GITHUB_REPOSITORY, PR)
 
-  # Get Working directories to run TF Plan on
-  working_directories = get_working_directories(modified_files, removed_files)
+  # # Get Working directories to run TF Plan on
+  working_directories = get_updated_modules(modified_files, removed_files)
+  # modified_files = ['examples/fabric_project/test2.tf', 'examples/fabric_project/variables.tf','modules/fabric-project/outputs.tf']
+  # removed_files = ['examples/fabric_project/test.tf']
+  # modified_files_raw = ['https://github.com/Mukul-Org/terraform_playground/blob/8b32601fd1dde900407558f070c900eb1f3e574a/examples/fabric_project/variables.tf']
+  # working_directories = ['examples/fabric_project','modules/fabric-project']
 
   # Loop through all the identified working directories
+  # Deleting added/modified & removed files
   try:
     for dir in working_directories:
-      comment, status = tf(TERRAFORM_CLI_PATH + '/' + dir)
+      
+      print("----------> RUN FOR: " + dir)
+      # Copying main directory
+      shutil.copytree(root+'/'+dir, os.getcwd()+'/temp/'+dir)
+
+      # Deleting added/modified & removed files
+      for mfile in modified_files:
+        if os.path.exists(os.getcwd()+'/temp/'+mfile):
+          print("Deleting file: " + mfile)
+          os.remove(os.getcwd()+'/temp/'+mfile)
+
+      for rfile in removed_files:
+        if os.path.exists(os.getcwd()+'/temp/'+rfile):
+          print("Deleting file: " + rfile)
+          os.remove(os.getcwd()+'/temp/'+rfile)
+
+  except requests.exceptions.RequestException as e: 
+    print('No working directory with TF configs in PR.')
+    raise SystemExit(e)
+
+  # Loop through all the identified working directories
+  # Download added/modified files
+  try:
+    for dir in working_directories:
+      
+      # Download added/modified files
+      for file in modified_files:
+
+        if dir in file:
+          for raw in modified_files_raw:
+
+            if file in raw:
+              print("Downloading file: " + raw)
+              downloadprfiles(raw, file, os.getcwd()+'/temp/'+dir)
+              break
+
+  except requests.exceptions.RequestException as e: 
+    print('No working directory with TF configs in PR.')
+    raise SystemExit(e)
+
+
+  # Loop through all the identified working directories
+  # Run Terraform Plan
+  try:
+    for dir in working_directories:
+      comment, status = tf(GITHUB_WORKSPACE + '/temp/' + dir)
       commentpr(GITHUB_REPOSITORY, PR, comment, TOKEN)
       if(status == 'fail'):
         sys.exit('Terraform Init or Terraform Plan FAILED for: '+ dir)
@@ -56,27 +109,43 @@ def main(PR):
     raise SystemExit(e)
 
 def pr_files(GITHUB_REPOSITORY,pr):
-    modified_files = []
     removed_files = []
+    modified_files = []
+    modified_files_raw = []
     try:
         response = requests.get('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/pulls/'+ str(pr) +'/files')
         for file in response.json():
             if(file['status'] == 'removed'):
+              print("Removed File: " + file['filename'])
               removed_files.append(file['filename'])
             else:
+              print("Added/Modified File: " + file['filename'])
               modified_files.append(file['filename'])
+              modified_files_raw.append(file['raw_url'])
 
-        print("Added/Modified Files:")
-        print(modified_files)
-        print("Removed Files:")
-        print(removed_files)
-
-        return modified_files, removed_files
+        return modified_files, modified_files_raw, removed_files
     except requests.exceptions.RequestException as e: 
         raise SystemExit(e)  
 
 
-def get_working_directories(modified_files, removed_files):
+def downloadprfiles(raw, file, path):
+
+  # print(path)
+  if not os.path.exists(path):
+      os.makedirs(path)
+
+  # print('Beginning file download with requests')
+  r = requests.get(raw)
+  with open(path + '/' + os.path.basename(file), 'wb') as f:
+      f.write(r.content)
+
+  # Retrieve HTTP meta-data
+  # print(r.status_code)
+  # print(r.headers['content-type'])
+  # print(r.encoding)
+
+
+def get_updated_modules(modified_files, removed_files):
   modified_files_dir = []
   removed_files_dir = []
 
