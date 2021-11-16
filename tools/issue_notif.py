@@ -25,6 +25,7 @@ def main():
 
     TOKEN             = os.getenv('GITHUB_TOKEN')
     GITHUB_REPOSITORY = os.getenv('GITHUB_REPOSITORY')
+    WEBHOOK = os.getenv('WEBHOOK') 
 
     response = open_issue(GITHUB_REPOSITORY)
     # pprint(response.json())
@@ -73,7 +74,6 @@ def main():
 
                 rawdata = setdata(header, str(number), title, user, labels, assignees, url)
                 # pprint(rawdata)
-                WEBHOOK = 'https://chat.googleapis.com/v1/spaces/AAAAi1Dbcfo/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=3ZT3slRZ1WcD7E5WvBn4BM8b7skzgCsZIWB248YoDqw%3D'
 
                 try:
                     os.system("curl --location --request POST '"+  WEBHOOK +"' --header 'Content-Type: application/json' --data-raw '"+ rawdata +"'")
