@@ -86,7 +86,7 @@ def main():
                 except requests.exceptions.RequestException as e: 
                     raise SystemExit(e)
             else:
-                print('Notifications already sent for: #' + issue['number'])
+                print('Notifications already sent for: #' + str(issue['number']))
 
     except requests.exceptions.RequestException as e: 
         print("No Issue in the repo ")
