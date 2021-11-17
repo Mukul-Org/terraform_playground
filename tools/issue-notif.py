@@ -76,8 +76,13 @@ def main():
                 # pprint(rawdata)
 
                 try:
-                    os.system("curl --location --request POST '"+  WEBHOOK +"' --header 'Content-Type: application/json' --data-raw '"+ rawdata +"'")
-                    commentissue(GITHUB_REPOSITORY, issue['number'], '<!-- Notification Check -->\nThank you for raising the request! RAD Lab admins have been notified.', TOKEN)
+                    comment = sendmsg(WEBHOOK, rawdata)
+                    # os.system("curl --location --request POST '"+  WEBHOOK +"' --header 'Content-Type: application/json' --data-raw '"+ rawdata +"'")
+                    if(comment != ''):
+                        print('Message sent for: ' + issue['number'] + ' ! Commenting Issue ...')
+                        commentissue(GITHUB_REPOSITORY, issue['number'], comment, TOKEN)
+                    else:
+                        print('Message not sent for: ' + issue['number'] + ' ! Skipping Issue Comment...')
                 except requests.exceptions.RequestException as e: 
                     raise SystemExit(e)
 
@@ -170,6 +175,17 @@ def setdata(header, number, title, user, labels, assignees, url):
     rawdata = json.dumps(rawdata)
     # print(type(rawdata))
     return rawdata
+
+def sendmsg(WEBHOOK, rawdata):
+    comment = ''
+    headers = {'Content-Type:': 'application/json'}
+    try:
+        response = requests.post(WEBHOOK, headers=headers, data=rawdata)
+        comment = '<!-- Notification Check -->\nThank you for raising the request! RAD Lab admins have been notified.'
+        # print(response.text)
+    except:
+        print('ERROR: Error Occured posting a message on Webhook!')
+    return comment
 
 def commentissue(GITHUB_REPOSITORY, number, comment, TOKEN):
     headers = {'Authorization': f'token {TOKEN}', 'Accept': 'application/vnd.github.v3+json'}
