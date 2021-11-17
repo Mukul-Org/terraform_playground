@@ -24,8 +24,8 @@ from requests.exceptions import URLRequired
 def main():
 
     TOKEN             = os.getenv('GITHUB_TOKEN')
+    WEBHOOK           = os.getenv('WEBHOOK') 
     GITHUB_REPOSITORY = os.getenv('GITHUB_REPOSITORY')
-    WEBHOOK = os.getenv('WEBHOOK') 
 
     response = open_issue(GITHUB_REPOSITORY)
     # pprint(response.json())
@@ -172,7 +172,7 @@ def setdata(header, number, title, user, labels, assignees, url):
     }
 
     # print(type(rawdata))
-    rawdata = json.dumps(rawdata)
+    # rawdata = json.dumps(rawdata)
     # print(type(rawdata))
     return rawdata
 

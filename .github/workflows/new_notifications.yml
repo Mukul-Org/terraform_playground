@@ -18,7 +18,7 @@ name: NEW - RAD Lab Notifications
 on:
   schedule:
     - cron:  '*/5 * * * *' 
-
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
