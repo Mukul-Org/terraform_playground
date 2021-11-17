@@ -172,7 +172,7 @@ def setdata(header, number, title, user, labels, assignees, url):
     }
 
     # print(type(rawdata))
-    # rawdata = json.dumps(rawdata)
+    rawdata = json.dumps(rawdata)
     # print(type(rawdata))
     return rawdata
 
