@@ -178,7 +178,7 @@ def setdata(header, number, title, user, labels, assignees, url):
 
 def sendmsg(WEBHOOK, rawdata):
     comment = ''
-    headers = {'Content-Type:': 'application/json'}
+    headers = {'Content-Type': 'application/json'}
     try:
         response = requests.post(WEBHOOK, headers=headers, data=rawdata)
         comment = '<!-- Notification Check -->\nThank you for raising the request! RAD Lab admins have been notified.'
