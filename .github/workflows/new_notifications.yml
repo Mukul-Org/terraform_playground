@@ -44,7 +44,6 @@ jobs:
         env:
           WEBHOOK: ${{ secrets.WEBHOOK }}
         id: issue-notif
-        if: github.event_name == 'schedule'
         run: |
           python issue-notif.py
         working-directory: tools
