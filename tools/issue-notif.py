@@ -35,7 +35,7 @@ def main():
 
             commentcheck = issuecommentcheck(GITHUB_REPOSITORY, issue['number'])
 
-            if(commentcheck == 'false'):
+            if(commentcheck == False):
 
                 if ("pull_request") in issue.keys():
                     print("Pull Request: "+ str(issue['number']))
@@ -85,7 +85,8 @@ def main():
                         print('Message not sent for: ' + str(issue['number']) + ' ! SKIPPING Commenting Issue...')
                 except requests.exceptions.RequestException as e: 
                     raise SystemExit(e)
-
+            else:
+                print('Notifications already sent for: #' + issue['number'])
 
     except requests.exceptions.RequestException as e: 
         print("No Issue in the repo ")
@@ -102,13 +103,13 @@ def open_issue(GITHUB_REPOSITORY):
 def issuecommentcheck(GITHUB_REPOSITORY, number):
     print('Checking if the notification has already been sent...')
     try:
-        status = 'false'
+        status = False
         response = requests.get('https://api.github.com/repos/'+ GITHUB_REPOSITORY +'/issues/'+ str(number) +'/comments')
         for comment in response.json():
             body = comment['body']
             if(body.startswith('<!-- Notification Check -->')):
                 # print(body)
-                status = 'true'
+                status = True
                 break
         return status
     except requests.exceptions.RequestException as e: 
