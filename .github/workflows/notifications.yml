@@ -16,12 +16,13 @@
 
 name: BUILD - RAD Lab Notifications
 on:
-  issues:
-    types: [opened, reopened]
-  pull_request:
-    branches:
-      - main
-    types: [opened]
+#   issues:
+#     types: [opened, reopened]
+#   pull_request:
+#     branches:
+#       - main
+#     types: [opened]
+  workflow_dispatch:
 
 jobs:
   build:
