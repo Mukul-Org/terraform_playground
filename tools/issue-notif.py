@@ -65,12 +65,12 @@ def main():
                 except:
                     assignees = ''
 
-                print(number)
-                print(title)
-                print(user)
-                print(labels)
-                print(assignees)
-                print(url)
+                # print(number)
+                # print(title)
+                # print(user)
+                # print(labels)
+                # print(assignees)
+                # print(url)
 
                 rawdata = setdata(header, str(number), title, user, labels, assignees, url)
                 # pprint(rawdata)
@@ -79,10 +79,10 @@ def main():
                     comment = sendmsg(WEBHOOK, rawdata)
                     # os.system("curl --location --request POST '"+  WEBHOOK +"' --header 'Content-Type: application/json' --data-raw '"+ rawdata +"'")
                     if(comment != ''):
-                        print('Message sent for: ' + issue['number'] + ' ! Commenting Issue ...')
+                        print('Message sent for: ' + str(issue['number']) + ' ! Commenting Issue ...')
                         commentissue(GITHUB_REPOSITORY, issue['number'], comment, TOKEN)
                     else:
-                        print('Message not sent for: ' + issue['number'] + ' ! Skipping Issue Comment...')
+                        print('Message not sent for: ' + str(issue['number']) + ' ! SKIPPING Commenting Issue...')
                 except requests.exceptions.RequestException as e: 
                     raise SystemExit(e)
 
@@ -183,8 +183,9 @@ def sendmsg(WEBHOOK, rawdata):
         response = requests.post(WEBHOOK, headers=headers, data=rawdata)
         comment = '<!-- Notification Check -->\nThank you for raising the request! RAD Lab admins have been notified.'
         # print(response.text)
-    except:
+    except requests.exceptions.RequestException as e: 
         print('ERROR: Error Occured posting a message on Webhook!')
+        raise SystemExit(e)
     return comment
 
 def commentissue(GITHUB_REPOSITORY, number, comment, TOKEN):
