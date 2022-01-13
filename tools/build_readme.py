@@ -23,11 +23,13 @@ def main():
     WORKFLOW_EMAIL = os.getenv('WORKFLOW_EMAIL')
     WORKFLOW_USERNAME = os.getenv('WORKFLOW_USERNAME')
 
+    print(GITHUB_WORKSPACE)
+
     modules_dir = GITHUB_WORKSPACE + '/modules'
 
     for module in glob.glob(modules_dir + '/*'):
 
-        # print(module)
+        print(module)
 
         try:
             # run the tfdoc.py
