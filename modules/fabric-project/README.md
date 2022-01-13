@@ -53,16 +53,6 @@ module "project_myproject" {
 | prefix | Prefix used to generate project id and name. | `string` | n/a | yes |
 | viewers | Optional list of IAM-format members to set as project viewers. | `list(string)` | `[]` | no |
 
-## Outputs
 
-| Name | Description |
-|------|-------------|
-| cloudsvc\_service\_account | Cloud services service account (depends on services). |
-| custom\_roles | Ids of the created custom roles. |
-| gce\_service\_account | Default GCE service account (depends on services). |
-| gke\_service\_account | Default GKE service account (depends on services). |
-| name | Name (depends on services). |
-| number | Project number (depends on services). |
-| project\_id | Project id (depends on services). |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
