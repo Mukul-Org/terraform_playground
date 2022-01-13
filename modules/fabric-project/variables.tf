@@ -99,7 +99,7 @@ variable "extra_bindings_members" {
 }
 
 variable "auto_create_network" {
-  description = "Whether to create the default network for the project"
+  description = "Whether to create the default network for the project."
   type        = bool
   default     = false
 }
