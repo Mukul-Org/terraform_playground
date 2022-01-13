@@ -23,6 +23,7 @@ on:
     paths:
       - 'modules/**/variables.tf'
       - 'modules/**/outputs.tf'
+      - 'modules/**/README.md'
   workflow_dispatch:
 permissions:
   pull-requests: write

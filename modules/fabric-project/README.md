@@ -29,7 +29,7 @@ module "project_myproject" {
 }
 ```
 
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- BEGIN TFDOC -->
 ## Inputs
 
 | Name | Description | Type | Default | Required |
@@ -55,4 +55,4 @@ module "project_myproject" {
 
 
 
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- END TFDOC -->
