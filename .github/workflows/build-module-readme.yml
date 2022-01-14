@@ -37,6 +37,7 @@ jobs:
       TF_IN_AUTOMATION: true
       WORKFLOW_EMAIL: ${{ secrets.WORKFLOW_EMAIL }}
       WORKFLOW_USERNAME: ${{ secrets.WORKFLOW_USERNAME }}
+      WORKFLOW_PAT: ${{ secrets.WORKFLOW_PAT }}
 
     steps:
       - name: Checkout
@@ -66,14 +67,3 @@ jobs:
         run: |
           python build_readme.py ${GITHUB_WORKSPACE}
         working-directory: tools   
-
-      # - name: commit files
-      #   run: |
-      #     git config --local user.email ${{ secrets.WORKFLOW_EMAIL }}
-      #     git config --local user.name ${{ secrets.WORKFLOW_USERNAME }}
-      #     git add -A
-      #     git commit -m "[WORKFLOW] Auto updating RAD-Lab Module README.md" -a
-
-      # - name: push changes
-      #   run: |
-      #     git push -u origin main

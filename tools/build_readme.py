@@ -24,6 +24,7 @@ def main():
     GITHUB_REPOSITORY = os.getenv('GITHUB_REPOSITORY')
     WORKFLOW_EMAIL    = os.getenv('WORKFLOW_EMAIL')
     WORKFLOW_USERNAME = os.getenv('WORKFLOW_USERNAME')
+    WORKFLOW_PAT      = os.getenv('WORKFLOW_PAT')
 
     print(GITHUB_WORKSPACE)
 
@@ -47,7 +48,7 @@ def main():
         os.system('git add -A')
         os.system('git commit -m "[WORKFLOW] Auto updating RAD-Lab Modules README.md" -a')
 
-        remote_repo="https://"+WORKFLOW_USERNAME+":"+TOKEN+"@github.com/"+GITHUB_REPOSITORY+".git"
+        remote_repo="https://"+WORKFLOW_USERNAME+":"+WORKFLOW_PAT+"@github.com/"+GITHUB_REPOSITORY+".git"
 
         # push changes
         os.system('git push ' + remote_repo + ' HEAD:main --force')
