@@ -20,7 +20,7 @@ import glob
 def main():
 
     GITHUB_WORKSPACE  = os.getenv('GITHUB_WORKSPACE')
-    WORKFLOW_EMAIL = os.getenv('WORKFLOW_EMAIL')
+    WORKFLOW_EMAIL    = os.getenv('WORKFLOW_EMAIL')
     WORKFLOW_USERNAME = os.getenv('WORKFLOW_USERNAME')
 
     print(GITHUB_WORKSPACE)
