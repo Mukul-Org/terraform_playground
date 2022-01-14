@@ -41,17 +41,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
+        with:
+          persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
+          fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
+    
       - name: setup python
         uses: actions/setup-python@v2
         with:
           python-version: 3.8 #install the python needed
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-          terraform_version: 1.0.11
 
       - name: Set environment
         run: |
@@ -65,18 +62,18 @@ jobs:
           pip install -r requirements.txt
         working-directory: tools
         
-      - name: execute py script # run the tfdoc.py
+      - name: execute py script # run the build_readme.py
         run: |
           python build_readme.py ${GITHUB_WORKSPACE}
         working-directory: tools   
 
-      - name: commit files
-        run: |
-          git config --local user.email ${{ secrets.WORKFLOW_EMAIL }}
-          git config --local user.name ${{ secrets.WORKFLOW_USERNAME }}
-          git add -A
-          git commit -m "[WORKFLOW] Auto updating RAD-Lab Module README.md" -a
+      # - name: commit files
+      #   run: |
+      #     git config --local user.email ${{ secrets.WORKFLOW_EMAIL }}
+      #     git config --local user.name ${{ secrets.WORKFLOW_USERNAME }}
+      #     git add -A
+      #     git commit -m "[WORKFLOW] Auto updating RAD-Lab Module README.md" -a
 
-      - name: push changes
-        run: |
-          git push -u origin main
+      # - name: push changes
+      #   run: |
+      #     git push -u origin main

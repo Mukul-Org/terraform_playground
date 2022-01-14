@@ -19,7 +19,9 @@ import glob
 
 def main():
 
+    TOKEN             = os.getenv('GITHUB_TOKEN')
     GITHUB_WORKSPACE  = os.getenv('GITHUB_WORKSPACE')
+    GITHUB_REPOSITORY = os.getenv('GITHUB_REPOSITORY')
     WORKFLOW_EMAIL    = os.getenv('WORKFLOW_EMAIL')
     WORKFLOW_USERNAME = os.getenv('WORKFLOW_USERNAME')
 
@@ -35,17 +37,23 @@ def main():
             # run the tfdoc.py
             os.system('python3 tfdoc.py ' + module)
 
-            # # commit files
-            # os.system('git config --local user.email ' + WORKFLOW_EMAIL)
-            # os.system('git config --local user.name ' + WORKFLOW_USERNAME)
-            # os.system('git add -A')
-            # os.system('git commit -m "[WORKFLOW] Auto updating RAD-Lab Module README.md" -a')
-
-            # # push changes
-            # os.system('git push -u -f origin main')
-
         except Exception as e:
             raise SystemExit(e)
+    
+    try: 
+        # commit files
+        os.system('git config --local user.email ' + WORKFLOW_EMAIL)
+        os.system('git config --local user.name ' + WORKFLOW_USERNAME)
+        os.system('git add -A')
+        os.system('git commit -m "[WORKFLOW] Auto updating RAD-Lab Modules README.md" -a')
+
+        remote_repo="https://"+WORKFLOW_USERNAME+":"+TOKEN+"@github.com/"+GITHUB_REPOSITORY+".git"
+
+        # push changes
+        os.system('git push ' + remote_repo + 'HEAD:main --force')
+
+    except Exception as e:
+        raise SystemExit(e)
 
 
 if __name__ == '__main__':
