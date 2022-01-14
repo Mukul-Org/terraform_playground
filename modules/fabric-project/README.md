@@ -30,29 +30,38 @@ module "project_myproject" {
 ```
 
 <!-- BEGIN TFDOC -->
-## Inputs
+## Variables
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| activate\_apis | Service APIs to enable. | `list(string)` | `[]` | no |
-| auto\_create\_network | Whether to create the default network for the project | `bool` | `false` | no |
-| billing\_account | Billing account id. | `string` | `""` | no |
-| custom\_roles | Map of role name => comma-delimited list of permissions to create in this project. | `map(string)` | `{}` | no |
-| editors | Optional list of IAM-format members to set as project editor. | `list(string)` | `[]` | no |
-| extra\_bindings\_members | List of comma-delimited IAM-format members for additional IAM bindings, one item per role. | `list(string)` | `[]` | no |
-| extra\_bindings\_roles | List of roles for additional IAM bindings, pair with members list below. | `list(string)` | `[]` | no |
-| gce\_service\_account\_roles | List of project id=>role to assign to the default GCE service account. | `list(string)` | `[]` | no |
-| labels | Resource labels. | `map(string)` | `{}` | no |
-| lien\_reason | If non-empty, creates a project lien with this description. | `string` | `""` | no |
-| name | Project name and id suffix. | `string` | n/a | yes |
-| oslogin | Enable oslogin. | `bool` | `false` | no |
-| oslogin\_admins | List of IAM-format members that will get OS Login admin role. | `list(string)` | `[]` | no |
-| oslogin\_users | List of IAM-format members that will get OS Login user role. | `list(string)` | `[]` | no |
-| owners | Optional list of IAM-format members to set as project owners. | `list(string)` | `[]` | no |
-| parent | The resource name of the parent Folder or Organization. Must be of the form folders/folder\_id or organizations/org\_id. | `string` | n/a | yes |
-| prefix | Prefix used to generate project id and name. | `string` | n/a | yes |
-| viewers | Optional list of IAM-format members to set as project viewers. | `list(string)` | `[]` | no |
+| name | description | type | required | default |
+|---|---|:---: |:---:|:---:|
+| name | Project name and id suffix. | <code title="">string</code> | ✓ |  |
+| parent | The resource name of the parent Folder or Organization. Must be of the form folders/folder_id or organizations/org_id. | <code title="">string</code> | ✓ |  |
+| prefix | Prefix used to generate project id and name. | <code title="">string</code> | ✓ |  |
+| *activate_apis* | Service APIs to enable. | <code title="list&#40;string&#41;">list(string)</code> |  | <code title="">[]</code> |
+| *auto_create_network* | Whether to create the default network for the project. | <code title="">bool</code> |  | <code title="">false</code> |
+| *billing_account* | Billing account id. | <code title="">string</code> |  | <code title=""></code> |
+| *custom_roles* | Map of role name => comma-delimited list of permissions to create in this project. | <code title="map&#40;string&#41;">map(string)</code> |  | <code title="">{}</code> |
+| *editors* | Optional list of IAM-format members to set as project editor. | <code title="list&#40;string&#41;">list(string)</code> |  | <code title="">[]</code> |
+| *extra_bindings_members* | List of comma-delimited IAM-format members for additional IAM bindings, one item per role. | <code title="list&#40;string&#41;">list(string)</code> |  | <code title="">[]</code> |
+| *extra_bindings_roles* | List of roles for additional IAM bindings, pair with members list below. | <code title="list&#40;string&#41;">list(string)</code> |  | <code title="">[]</code> |
+| *gce_service_account_roles* | List of project id=>role to assign to the default GCE service account. | <code title="list&#40;string&#41;">list(string)</code> |  | <code title="">[]</code> |
+| *labels* | Resource labels. | <code title="map&#40;string&#41;">map(string)</code> |  | <code title="">{}</code> |
+| *lien_reason* | If non-empty, creates a project lien with this description. | <code title="">string</code> |  | <code title=""></code> |
+| *oslogin* | Enable oslogin. | <code title="">bool</code> |  | <code title="">false</code> |
+| *oslogin_admins* | List of IAM-format members that will get OS Login admin role. | <code title="list&#40;string&#41;">list(string)</code> |  | <code title="">[]</code> |
+| *oslogin_users* | List of IAM-format members that will get OS Login user role. | <code title="list&#40;string&#41;">list(string)</code> |  | <code title="">[]</code> |
+| *owners* | Optional list of IAM-format members to set as project owners. | <code title="list&#40;string&#41;">list(string)</code> |  | <code title="">[]</code> |
+| *viewers* | Optional list of IAM-format members to set as project viewers. | <code title="list&#40;string&#41;">list(string)</code> |  | <code title="">[]</code> |
 
+## Outputs
 
-
+| name | description | sensitive |
+|---|---|:---:|
+| cloudsvc_service_account | Cloud services service account (depends on services). |  |
+| custom_roles | Ids of the created custom roles. |  |
+| gce_service_account | Default GCE service account (depends on services). |  |
+| gke_service_account | Default GKE service account (depends on services). |  |
+| name | Name (depends on services). |  |
+| number | Project number (depends on services). |  |
+| project_id | Project id (depends on services). |  |
 <!-- END TFDOC -->
