@@ -42,7 +42,7 @@ def main():
             os.system('git commit -m "[WORKFLOW] Auto updating RAD-Lab Module README.md" -a')
 
             # push changes
-            os.system('git push -u origin main')
+            os.system('git push -f -u origin main')
 
         except Exception as e:
             raise SystemExit(e)
