@@ -19,20 +19,19 @@ import glob
 
 def main():
 
-    TOKEN             = os.getenv('GITHUB_TOKEN')
     GITHUB_WORKSPACE  = os.getenv('GITHUB_WORKSPACE')
     GITHUB_REPOSITORY = os.getenv('GITHUB_REPOSITORY')
     WORKFLOW_EMAIL    = os.getenv('WORKFLOW_EMAIL')
     WORKFLOW_USERNAME = os.getenv('WORKFLOW_USERNAME')
     WORKFLOW_PAT      = os.getenv('WORKFLOW_PAT')
 
-    print(GITHUB_WORKSPACE)
+    # print(GITHUB_WORKSPACE)
 
     modules_dir = GITHUB_WORKSPACE + '/modules'
 
     for module in glob.glob(modules_dir + '/*'):
 
-        print(module)
+        # print(module)
 
         try:
             # run the tfdoc.py

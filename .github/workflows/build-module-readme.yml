@@ -33,8 +33,6 @@ jobs:
     name: 'Module README Variables/Outputs'
     runs-on: ubuntu-latest
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      TF_IN_AUTOMATION: true
       WORKFLOW_EMAIL: ${{ secrets.WORKFLOW_EMAIL }}
       WORKFLOW_USERNAME: ${{ secrets.WORKFLOW_USERNAME }}
       WORKFLOW_PAT: ${{ secrets.WORKFLOW_PAT }}
@@ -42,9 +40,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
-          fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
     
       - name: setup python
         uses: actions/setup-python@v2
