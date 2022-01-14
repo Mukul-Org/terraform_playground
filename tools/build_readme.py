@@ -35,14 +35,14 @@ def main():
             # run the tfdoc.py
             os.system('python3 tfdoc.py ' + module)
 
-            # commit files
-            os.system('git config --local user.email ' + WORKFLOW_EMAIL)
-            os.system('git config --local user.name ' + WORKFLOW_USERNAME)
-            os.system('git add -A')
-            os.system('git commit -m "[WORKFLOW] Auto updating RAD-Lab Module README.md" -a')
+            # # commit files
+            # os.system('git config --local user.email ' + WORKFLOW_EMAIL)
+            # os.system('git config --local user.name ' + WORKFLOW_USERNAME)
+            # os.system('git add -A')
+            # os.system('git commit -m "[WORKFLOW] Auto updating RAD-Lab Module README.md" -a')
 
-            # push changes
-            os.system('git push -u -f origin main')
+            # # push changes
+            # os.system('git push -u -f origin main')
 
         except Exception as e:
             raise SystemExit(e)
