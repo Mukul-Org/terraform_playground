@@ -39,7 +39,7 @@ module "project_myproject" {
 | prefix | Prefix used to generate project id and name. | <code title="">string</code> | ✓ |  |
 | *activate_apis* | Service APIs to enable. | <code title="list&#40;string&#41;">list(string)</code> |  | <code title="">[]</code> |
 | *auto_create_network* | Whether to create the default network for the project. | <code title="">bool</code> |  | <code title="">false</code> |
-| *billing_account* | Billing account ID. | <code title="">string</code> |  | <code title=""></code> |
+| *billing_account* | Billing account id. | <code title="">string</code> |  | <code title=""></code> |
 | *custom_roles* | Map of role name => comma-delimited list of permissions to create in this project. | <code title="map&#40;string&#41;">map(string)</code> |  | <code title="">{}</code> |
 | *editors* | Optional list of IAM-format members to set as project editor. | <code title="list&#40;string&#41;">list(string)</code> |  | <code title="">[]</code> |
 | *extra_bindings_members* | List of comma-delimited IAM-format members for additional IAM bindings, one item per role. | <code title="list&#40;string&#41;">list(string)</code> |  | <code title="">[]</code> |
