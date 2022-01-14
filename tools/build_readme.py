@@ -50,7 +50,7 @@ def main():
         remote_repo="https://"+WORKFLOW_USERNAME+":"+TOKEN+"@github.com/"+GITHUB_REPOSITORY+".git"
 
         # push changes
-        os.system('git push ' + remote_repo + 'HEAD:main --force')
+        os.system('git push ' + remote_repo + ' HEAD:main --force')
 
     except Exception as e:
         raise SystemExit(e)
