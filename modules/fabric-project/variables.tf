@@ -30,7 +30,7 @@ variable "name" {
 }
 
 variable "billing_account" {
-  description = "Billing account id."
+  description = "Billing account ID."
   type        = string
   default     = ""
 }
